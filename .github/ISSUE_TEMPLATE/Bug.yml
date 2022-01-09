@@ -35,6 +35,13 @@ body:
         - 0.0.1 (Snapshot)
     validations:
       required: true
+  - type: textarea
+    id: todoList
+    attributes:
+      label: 할일목록
+      description: 할일목록을 작성해주세요!
+      placeholder: 할일목록을 작성해주세요!
+      value: "- [ ] TODO"
   - type: checkboxes
     id: priority
     attributes:

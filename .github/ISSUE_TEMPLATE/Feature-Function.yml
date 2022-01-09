@@ -35,6 +35,13 @@ body:
     attributes:
       label: 고려사항
       description: 개발시 고려해야 할 사항
+  - type: textarea
+    id: todoList
+    attributes:
+      label: 할일목록
+      description: 할일목록을 작성해주세요!
+      placeholder: 할일목록을 작성해주세요!
+      value: "- [ ] TODO"
   - type: checkboxes
     id: priority
     attributes:
