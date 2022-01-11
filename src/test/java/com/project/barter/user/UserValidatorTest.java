@@ -2,6 +2,7 @@ package com.project.barter.user;
 
 import com.project.barter.user.domain.Birthday;
 import com.project.barter.user.validator.BirthdayValidator;
+import com.project.barter.user.validator.PhoneNumberValidator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -14,9 +15,9 @@ public class UserValidatorTest {
 
     @ParameterizedTest
     @MethodSource("birthdayList")
-    public void BirthdayTest(Boolean bool, Birthday birthday) throws Exception{
+    public void BirthdayTest(Boolean bool, Birthday birthday){
         BirthdayValidator birthdayValidator = new BirthdayValidator();
-        Assertions.assertThat(birthdayValidator.isValid(birthday,null)).isEqualTo(bool);
+        Assertions.assertThat(bool).isEqualTo(birthdayValidator.isValid(birthday,null));
     }
 
     public static Stream<Arguments> birthdayList(){
@@ -32,7 +33,7 @@ public class UserValidatorTest {
     @MethodSource("phoneNumberList")
     public void phoneNumberTest(Boolean bool, String phoneNumber){
         PhoneNumberValidator phoneNumberValidator = new PhoneNumberValidator();
-        Assertions.assertThat(phoneNumberValidator.isValid(phoneNumber,null)).isEqualTo(bool);
+        Assertions.assertThat(bool).isEqualTo(phoneNumberValidator.isValid(phoneNumber,null));
     }
 
     public static Stream<Arguments> phoneNumberList(){
