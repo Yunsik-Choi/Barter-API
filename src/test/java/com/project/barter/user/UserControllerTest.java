@@ -1,7 +1,7 @@
 package com.project.barter.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.barter.user.domain.Birth;
+import com.project.barter.user.domain.Birthday;
 import com.project.barter.user.dto.UserPost;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -31,7 +30,7 @@ class UserControllerTest {
                 .userId("userId")
                 .password("password")
                 .name("이름")
-                .birth(new Birth(2020,12,12))
+                .birthday(new Birthday(2020,12,12))
                 .email("google@gmail.com")
                 .phoneNumber("01012345678")
                 .build();
