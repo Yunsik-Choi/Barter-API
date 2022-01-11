@@ -1,6 +1,7 @@
 package com.project.barter.user.dto;
 
 import com.project.barter.user.domain.Birthday;
+import com.project.barter.user.validator.Birth;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +20,7 @@ public class UserPost {
     private String password;
     @NotBlank
     private String name;
+    @Birth
     private Birthday birthday;
     @Email
     private String email;
