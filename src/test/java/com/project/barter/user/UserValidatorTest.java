@@ -16,7 +16,7 @@ public class UserValidatorTest {
     @MethodSource("birthdayList")
     public void BirthdayTest(Boolean bool, Birthday birthday) throws Exception{
         BirthdayValidator birthdayValidator = new BirthdayValidator();
-        Assertions.assertThat(birthdayValidator.isValid(birthday,null));
+        Assertions.assertThat(birthdayValidator.isValid(birthday,null)).isEqualTo(bool);
     }
 
     public static Stream<Arguments> birthdayList(){
@@ -25,6 +25,22 @@ public class UserValidatorTest {
                 Arguments.of(true,new Birthday(1998,01,01)),
                 Arguments.of(true,new Birthday(now.getYear(),now.getMonthValue(),now.getDayOfMonth())),
                 Arguments.of(false,new Birthday(2200,12,12))
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("phoneNumberList")
+    public void phoneNumberTest(Boolean bool, String phoneNumber){
+        PhoneNumberValidator phoneNumberValidator = new PhoneNumberValidator();
+        Assertions.assertThat(phoneNumberValidator.isValid(phoneNumber,null)).isEqualTo(bool);
+    }
+
+    public static Stream<Arguments> phoneNumberList(){
+        return Stream.of(
+                Arguments.of(true, "01012345678"),
+                Arguments.of(false, "01112345678"),
+                Arguments.of(false, "0102345678"),
+                Arguments.of(false, "010234567a8")
         );
     }
 
