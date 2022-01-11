@@ -3,6 +3,7 @@ package com.project.barter.user;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.barter.user.domain.Birth;
 import com.project.barter.user.dto.UserPost;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -23,8 +24,9 @@ class UserControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    @DisplayName("유저 회원가입 성공")
     @Test
-    public void User_Join() throws Exception{
+    public void User_Join_Success() throws Exception{
         UserPost userPost = UserPost.builder()
                 .userId("userId")
                 .password("password")
