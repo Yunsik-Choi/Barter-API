@@ -1,52 +1,52 @@
 [
-    {
-        "name": "Priority: Critical",
-        "color": "#a70018",
-        "description": "우선순위 긴급"
-    },
-    {
-        "name": "Priority: High",
-        "color": "#c02e4e",
-        "description": "우선순위 상"
-    },
-    {
-        "name": "Priority: Medium",
-        "color": "#ff3ea5",
-        "description": "우선순위 중"
-    },
-    {
-        "name": "Priority: Low",
-        "color": "#eb5138",
-        "description": "우선순위 하"
-    },
-    {
-        "name": "Status: To Do",
-        "color": "#00d800",
-        "description": "처리해야 되는 이슈"
-    },
-    {
-        "name": "Status: In Progress",
-        "color": "#44a942",
-        "description": "진행 중인 이슈"
-    },
-    {
-        "name": "Status: In Pending",
-        "color": "#375e35",
-        "description": "보류 중인 이슈"
-    },
-    {
-        "name": "Type: Bug",
-        "color": "#ff0000",
-        "description": "정상 동작하지 않는 기능"
-    },
-    {
-        "name": "Type: Feature/Document",
-        "color": "#3c3cff",
-        "description": "문서 추가 및 보완 작업"
-    },
-    {
-        "name": "Type: Feature/Function",
-        "color": "#379fff",
-        "description": "새로운 기능 및 개선 사항"
-    }
+  {
+    "name": "Priority: Critical",
+    "color": "#a70018",
+    "description": "우선순위 긴급"
+  },
+  {
+    "name": "Priority: High",
+    "color": "#c02e4e",
+    "description": "우선순위 상"
+  },
+  {
+    "name": "Priority: Medium",
+    "color": "#ff3ea5",
+    "description": "우선순위 중"
+  },
+  {
+    "name": "Priority: Low",
+    "color": "#eb5138",
+    "description": "우선순위 하"
+  },
+  {
+    "name": "Status: To Do",
+    "color": "#00d800",
+    "description": "처리해야 되는 이슈"
+  },
+  {
+    "name": "Status: In Progress",
+    "color": "#44a942",
+    "description": "진행 중인 이슈"
+  },
+  {
+    "name": "Status: In Pending",
+    "color": "#375e35",
+    "description": "보류 중인 이슈"
+  },
+  {
+    "name": "Type: Bug",
+    "color": "#ff0000",
+    "description": "정상 동작하지 않는 기능"
+  },
+  {
+    "name": "Type: Feature/Document",
+    "color": "#3c3cff",
+    "description": "문서 추가 및 보완 작업"
+  },
+  {
+    "name": "Type: Feature/Function",
+    "color": "#379fff",
+    "description": "새로운 기능 및 개선 사항"
+  }
 ]
