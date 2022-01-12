@@ -1,8 +1,13 @@
 package com.project.barter.user.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Embeddable;
+
+@NoArgsConstructor
+@Embeddable
 @Setter @Getter
 public class Birthday {
 
