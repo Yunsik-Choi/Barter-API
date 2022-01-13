@@ -6,15 +6,19 @@ import com.project.barter.user.dto.UserPost;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
+@AutoConfigureRestDocs
 @WebMvcTest(UserController.class)
 class UserControllerTest {
 
@@ -35,12 +39,30 @@ class UserControllerTest {
                 .phoneNumber("01012345678")
                 .build();
 
-
         mockMvc.perform(post("/join")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(userPost)))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andDo(document("User 회원가입",
+                        requestFields(
+                                fieldWithPath("userId").description("유저 로그인 아이디"),
+                                fieldWithPath("password").description("유저 로그인 비밀번호"),
+                                fieldWithPath("name").description("유저 이름"),
+                                subsectionWithPath("birthday").description("유저 생년월일"),
+                                fieldWithPath("email").description("유저 이메일"),
+                                fieldWithPath("phoneNumber").description("유저 전화번호")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").description("유저 식별자"),
+                                fieldWithPath("userId").description("유저 로그인 아이디"),
+                                fieldWithPath("password").description("유저 로그인 비밀번호"),
+                                fieldWithPath("name").description("유저 이름"),
+                                subsectionWithPath("birthday").description("유저 생년월일"),
+                                fieldWithPath("email").description("유저 이메일"),
+                                fieldWithPath("phoneNumber").description("유저 전화번호")
+                        )
+                ));
     }
 
 }
