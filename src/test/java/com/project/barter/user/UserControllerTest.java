@@ -8,9 +8,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -26,6 +31,8 @@ class UserControllerTest {
     MockMvc mockMvc;
     @Autowired
     ObjectMapper objectMapper;
+    @MockBean
+    UserRepository userRepository;
 
     @DisplayName("유저 회원가입 성공")
     @Test
@@ -38,6 +45,10 @@ class UserControllerTest {
                 .email("google@gmail.com")
                 .phoneNumber("01012345678")
                 .build();
+
+        User user = objectMapper.convertValue(userPost,User.class);
+        user.setId(1L);
+        when(userRepository.save(any(User.class))).thenReturn(user);
 
         mockMvc.perform(post("/join")
                 .contentType(MediaType.APPLICATION_JSON)
