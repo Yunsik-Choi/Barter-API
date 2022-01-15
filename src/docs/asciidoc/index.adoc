@@ -1,0 +1,5 @@
+== Request Fields
+include::{snippets}/User 회원가입/request-fields.adoc[]
+
+== Example
+include::{snippets}/User 회원가입/request-body.adoc[]
