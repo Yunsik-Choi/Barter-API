@@ -76,4 +76,36 @@ class UserControllerTest {
                 ));
     }
 
+    @Test
+    public void alreadyExistsUserIdJoin() throws Exception{
+        UserPost userPost = UserPost.builder()
+                .userId("userId")
+                .password("password")
+                .name("이름")
+                .birthday(new Birthday(2020,12,12))
+                .email("google@gmail.com")
+                .phoneNumber("01012345678")
+                .build();
+
+        User user = objectMapper.convertValue(userPost,User.class);
+        user.setId(1L);
+        when(userRepository.findUserByUserId(userPost.getUserId())).thenReturn(Optional.of(user));
+
+        mockMvc.perform(post("/join")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userPost)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andDo(document("이미 존재하는 UserId로 회원가입",
+                        requestFields(
+                                fieldWithPath("userId").description("유저 로그인 아이디"),
+                                fieldWithPath("password").description("유저 로그인 비밀번호"),
+                                fieldWithPath("name").description("유저 이름"),
+                                subsectionWithPath("birthday").description("유저 생년월일"),
+                                fieldWithPath("email").description("유저 이메일"),
+                                fieldWithPath("phoneNumber").description("유저 전화번호")
+                        )
+                ));
+    }
+
 }
