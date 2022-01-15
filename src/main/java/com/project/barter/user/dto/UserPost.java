@@ -3,14 +3,12 @@ package com.project.barter.user.dto;
 import com.project.barter.user.domain.Birthday;
 import com.project.barter.user.validator.Birth;
 import com.project.barter.user.validator.PhoneNumber;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
+@NoArgsConstructor @AllArgsConstructor
 @Builder
 @Getter @Setter
 public class UserPost {
