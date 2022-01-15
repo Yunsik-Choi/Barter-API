@@ -3,9 +3,14 @@ package com.project.barter.user;
 import com.project.barter.user.domain.Birthday;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest
 public class UserRepositoryTest {
@@ -50,10 +55,9 @@ public class UserRepositoryTest {
                 .build();
 
         userRepository.save(user1);
-
         org.junit.jupiter.api.Assertions.assertThrows(
                 DataIntegrityViolationException.class,
-                ()-> userRepository.save(user2));
+                ()-> userRepository.saveAndFlush(user2));
     }
 
 

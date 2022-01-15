@@ -4,11 +4,9 @@ import com.project.barter.user.domain.Birthday;
 import com.project.barter.user.validator.Birth;
 import com.project.barter.user.validator.PhoneNumber;
 import lombok.*;
+import org.hibernate.validator.constraints.UniqueElements;
 
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
@@ -20,6 +18,7 @@ public class User {
     @GeneratedValue
     @Id
     private Long id;
+    @Column(unique = true)
     @NotBlank
     private String userId;
     @NotBlank
