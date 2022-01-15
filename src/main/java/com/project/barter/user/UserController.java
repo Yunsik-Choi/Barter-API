@@ -18,6 +18,9 @@ public class UserController {
 
     @PostMapping("/join")
     public ResponseEntity join(@Validated @RequestBody UserPost userPost){
+        if(userRepository.findUserByUserId(userPost.getUserId()).isPresent()){
+            return ResponseEntity.badRequest().build();
+        }
         return ResponseEntity.ok().body(userRepository.save(objectMapper.convertValue(userPost,User.class)));
     }
 
