@@ -177,7 +177,7 @@ class UserControllerTest {
                 .content(objectMapper.writeValueAsString(unavailableUserLogin)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andDo(document("Unavailable UserLogin",
+                .andDo(document("User Unavailable UserLogin",
                         requestFields(
                                 fieldWithPath("userId").description("로그인시 사용하는 유저아이디"),
                                 fieldWithPath("password").description("로그인시 사용하는 유저 비밀번호")
