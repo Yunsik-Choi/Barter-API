@@ -73,8 +73,9 @@ class UserControllerTest {
                 ));
     }
 
+    @DisplayName("이미 존재하는 아이디로 회원가입 시도")
     @Test
-    public void alreadyExistsUserIdJoin() throws Exception{
+    public void Already_Exists_UserId() throws Exception{
         UserPost userPost = UserUtils.getCompleteUserPost();
         User user = objectMapper.convertValue(userPost,User.class);
         user.setId(1L);
@@ -99,8 +100,9 @@ class UserControllerTest {
                 ));
     }
 
+    @DisplayName("UserPost객체 제약조건 준수 실패")
     @Test
-    public void UserPostBindingError() throws Exception {
+    public void UserPost_Binding_Error() throws Exception {
         UserPost userPost = UserPost.builder()
                 .userId(" ")
                 .password(" ")
@@ -130,8 +132,9 @@ class UserControllerTest {
 
     }
 
+    @DisplayName("유저 로그인 성공")
     @Test
-    public void loginUser() throws Exception{
+    public void Login_User_Success() throws Exception{
         User user = UserUtils.getCompleteUser();
         user.setId(1L);
         UserLogin userLogin = new UserLogin(user.getUserId(),user.getPassword());

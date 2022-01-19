@@ -2,6 +2,7 @@ package com.project.barter.user;
 
 import com.project.barter.user.domain.Birthday;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,9 @@ public class UserRepositoryTest {
     @Autowired
     UserRepository userRepository;
 
+    @DisplayName("유저 저장 성공")
     @Test
-    public void saveUser(){
+    public void Save_User_Success(){
         User user = UserUtils.getCompleteUser();
         userRepository.save(user);
         User findUser = userRepository.findById(1L).get();
@@ -27,8 +29,9 @@ public class UserRepositoryTest {
         Assertions.assertThat("이름").isEqualTo(findUser.getName());
     }
 
+    @DisplayName("이미 존재하는 아이디 저장 시도시 실패")
     @Test
-    public void alreadyExistsUserId(){
+    public void Already_Exists_UserId(){
         User user1 = UserUtils.getCompleteUser();
         User user2 = UserUtils.getCompleteUser();
 
@@ -38,8 +41,9 @@ public class UserRepositoryTest {
                 ()-> userRepository.saveAndFlush(user2));
     }
 
+    @DisplayName("유저아이디와 패스워드로 유저 찾기")
     @Test
-    public void findByUserIdAndPassword(){
+    public void Find_By_UserId_And_Password(){
         User user = UserUtils.getCompleteUser();
 
         userRepository.save(user);
