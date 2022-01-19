@@ -2,6 +2,7 @@ package com.project.barter.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.barter.user.domain.Birthday;
+import com.project.barter.user.dto.UserLogin;
 import com.project.barter.user.dto.UserPost;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -127,6 +128,40 @@ class UserControllerTest {
                         )
                 ));
 
+    }
+
+    @Test
+    public void loginUser() throws Exception{
+        User user = UserUtils.getCompleteUser();
+        user.setId(1L);
+        UserLogin userLogin = new UserLogin(user.getUserId(),user.getPassword());
+
+        when(userRepository.findUserByUserIdAndPassword(userLogin.getUserId(),userLogin.getPassword()))
+            .thenReturn(Optional.of(user));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+
+        mockMvc.perform(post("/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userLogin)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("User Login",
+                        requestFields(
+                            fieldWithPath("userId").description("로그인시 사용하는 유저 아이디"),
+                            fieldWithPath("password").description("로그인시 사용하는 비밀번호")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").description("유저 식별자"),
+                                fieldWithPath("userId").description("유저 로그인 아이디"),
+                                fieldWithPath("password").description("유저 로그인 비밀번호"),
+                                fieldWithPath("name").description("유저 이름"),
+                                fieldWithPath("birthday.year").description("유저 출생년"),
+                                fieldWithPath("birthday.month").description("유저 출생월"),
+                                fieldWithPath("birthday.day").description("유저 출생일"),
+                                fieldWithPath("email").description("유저 이메일"),
+                                fieldWithPath("phoneNumber").description("유저 전화번호")
+                        )
+                ));
     }
 
 }
