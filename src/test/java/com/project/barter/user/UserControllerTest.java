@@ -1,5 +1,6 @@
 package com.project.barter.user;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.barter.user.domain.Birthday;
 import com.project.barter.user.dto.UserPost;
@@ -111,6 +112,37 @@ class UserControllerTest {
                                 fieldWithPath("phoneNumber").description("유저 전화번호")
                         )
                 ));
+    }
+
+    @Test
+    public void UserPostBindingError() throws Exception {
+        UserPost userPost = UserPost.builder()
+                .userId(" ")
+                .password(" ")
+                .name(" ")
+                .birthday(new Birthday(3000,12,12))
+                .email("googl!gmail.com")
+                .phoneNumber("0112345678")
+                .build();
+
+        mockMvc.perform(post("/join")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userPost)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andDo(document("User 회원가입 실패 Exists UserId",
+                        requestFields(
+                                fieldWithPath("userId").description("유저 로그인 아이디"),
+                                fieldWithPath("password").description("유저 로그인 비밀번호"),
+                                fieldWithPath("name").description("유저 이름"),
+                                fieldWithPath("birthday.year").description("유저 출생년"),
+                                fieldWithPath("birthday.month").description("유저 출생월"),
+                                fieldWithPath("birthday.day").description("유저 출생일"),
+                                fieldWithPath("email").description("유저 이메일"),
+                                fieldWithPath("phoneNumber").description("유저 전화번호")
+                        )
+                ));
+
     }
 
 }
