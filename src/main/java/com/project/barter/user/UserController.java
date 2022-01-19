@@ -37,7 +37,9 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
         HttpSession session = request.getSession(false);
-        session.setAttribute("loginUser",userLogin.getUserId());
+        if(session!=null) {
+            session.setAttribute("loginUser", userLogin.getUserId());
+        }
         return ResponseEntity.ok().body(userRepository.findById(loginRequestUser.get().getId()));
     }
 

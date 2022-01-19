@@ -2,8 +2,7 @@ package com.project.barter.user;
 
 import com.project.barter.user.domain.Birthday;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -13,12 +12,14 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DataJpaTest
 public class UserRepositoryTest {
 
     @Autowired
     UserRepository userRepository;
 
+    @Order(1)
     @DisplayName("유저 저장 성공")
     @Test
     public void Save_User_Success(){

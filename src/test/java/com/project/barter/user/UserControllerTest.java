@@ -167,4 +167,22 @@ class UserControllerTest {
                 ));
     }
 
+    @DisplayName("유저 로그인 실패")
+    @Test
+    public void User_Login_Fail() throws Exception{
+        UserLogin unavailableUserLogin = new UserLogin("id","pw");
+
+        mockMvc.perform(post("/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(unavailableUserLogin)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andDo(document("Unavailable UserLogin",
+                        requestFields(
+                                fieldWithPath("userId").description("로그인시 사용하는 유저아이디"),
+                                fieldWithPath("password").description("로그인시 사용하는 유저 비밀번호")
+                        )
+                ));
+    }
+
 }
