@@ -20,15 +20,7 @@ public class UserRepositoryTest {
 
     @Test
     public void saveUser(){
-        User user = User.builder()
-                .userId("userId")
-                .password("password")
-                .name("이름")
-                .birthday(new Birthday(2020,12,12))
-                .email("google@gmail.com")
-                .phoneNumber("01012345678")
-                .build();
-
+        User user = UserUtils.getCompleteUser();
         userRepository.save(user);
         User findUser = userRepository.findById(1L).get();
         Assertions.assertThat(1L).isEqualTo(findUser.getId());
@@ -37,27 +29,26 @@ public class UserRepositoryTest {
 
     @Test
     public void alreadyExistsUserId(){
-        User user1 = User.builder()
-                .userId("userId")
-                .password("password")
-                .name("유저1")
-                .birthday(new Birthday(2010,12,12))
-                .email("naver@gmail.com")
-                .phoneNumber("01012345678")
-                .build();
-        User user2 = User.builder()
-                .userId("userId")
-                .password("pass")
-                .name("유저2")
-                .birthday(new Birthday(2020,12,12))
-                .email("google@gmail.com")
-                .phoneNumber("01012345678")
-                .build();
+        User user1 = UserUtils.getCompleteUser();
+        User user2 = UserUtils.getCompleteUser();
 
         userRepository.save(user1);
         org.junit.jupiter.api.Assertions.assertThrows(
                 DataIntegrityViolationException.class,
                 ()-> userRepository.saveAndFlush(user2));
+    }
+
+    @Test
+    public void findByUserIdAndPassword(){
+        User user = UserUtils.getCompleteUser();
+
+        userRepository.save(user);
+
+        Assertions.assertThat(user.getUserId())
+                .isEqualTo(
+                        userRepository.findUserByUserIdAndPassword(user.getUserId(),user.getPassword())
+                        .get().getUserId()
+                );
     }
 
 

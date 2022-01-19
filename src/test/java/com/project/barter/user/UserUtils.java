@@ -16,5 +16,16 @@ public class UserUtils {
                 .build();
     }
 
+    public static User getCompleteUser(){
+        return User.builder()
+                .userId("userId")
+                .password("password")
+                .name("이름")
+                .birthday(new Birthday(2020,12,12))
+                .email("google@gmail.com")
+                .phoneNumber("01012345678")
+                .build();
+    }
+
 
 }
