@@ -36,10 +36,9 @@ public class UserController {
         if(!loginRequestUser.isPresent()){
             return ResponseEntity.badRequest().build();
         }
-        User loginSuccessUser = loginRequestUser.get();
-        HttpSession session = request.getSession();
-        session.setAttribute("loginUser",loginSuccessUser.getUserId());
-        return ResponseEntity.ok().body(userRepository.findById(loginSuccessUser.getId()));
+        HttpSession session = request.getSession(false);
+        session.setAttribute("loginUser",userLogin.getUserId());
+        return ResponseEntity.ok().body(userRepository.findById(loginRequestUser.get().getId()));
     }
 
 }
