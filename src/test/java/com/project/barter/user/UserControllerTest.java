@@ -22,7 +22,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 @AutoConfigureRestDocs
 @WebMvcTest(UserController.class)
 class UserControllerTest {
@@ -60,7 +59,9 @@ class UserControllerTest {
                                 fieldWithPath("userId").description("유저 로그인 아이디"),
                                 fieldWithPath("password").description("유저 로그인 비밀번호"),
                                 fieldWithPath("name").description("유저 이름"),
-                                subsectionWithPath("birthday").description("유저 생년월일"),
+                                fieldWithPath("birthday.year").description("유저 출생년"),
+                                fieldWithPath("birthday.month").description("유저 출생월"),
+                                fieldWithPath("birthday.day").description("유저 출생일"),
                                 fieldWithPath("email").description("유저 이메일"),
                                 fieldWithPath("phoneNumber").description("유저 전화번호")
                         ),
@@ -69,7 +70,9 @@ class UserControllerTest {
                                 fieldWithPath("userId").description("유저 로그인 아이디"),
                                 fieldWithPath("password").description("유저 로그인 비밀번호"),
                                 fieldWithPath("name").description("유저 이름"),
-                                subsectionWithPath("birthday").description("유저 생년월일"),
+                                fieldWithPath("birthday.year").description("유저 출생년"),
+                                fieldWithPath("birthday.month").description("유저 출생월"),
+                                fieldWithPath("birthday.day").description("유저 출생일"),
                                 fieldWithPath("email").description("유저 이메일"),
                                 fieldWithPath("phoneNumber").description("유저 전화번호")
                         )
@@ -96,12 +99,14 @@ class UserControllerTest {
                 .content(objectMapper.writeValueAsString(userPost)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andDo(document("이미 존재하는 UserId로 회원가입",
+                .andDo(document("User 회원가입 실패 Exists UserId",
                         requestFields(
                                 fieldWithPath("userId").description("유저 로그인 아이디"),
                                 fieldWithPath("password").description("유저 로그인 비밀번호"),
                                 fieldWithPath("name").description("유저 이름"),
-                                subsectionWithPath("birthday").description("유저 생년월일"),
+                                fieldWithPath("birthday.year").description("유저 출생년"),
+                                fieldWithPath("birthday.month").description("유저 출생월"),
+                                fieldWithPath("birthday.day").description("유저 출생일"),
                                 fieldWithPath("email").description("유저 이메일"),
                                 fieldWithPath("phoneNumber").description("유저 전화번호")
                         )
