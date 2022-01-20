@@ -1,0 +1,41 @@
+= 회원가입 명세서
+
+== `회원가입`
+
+- Request Fields
+include::{snippets}/User 회원가입/request-fields.adoc[]
+
+- Request Example
+include::{snippets}/User 회원가입/http-request.adoc[]
+
+- Response Fields
+include::{snippets}/User 회원가입/response-fields.adoc[]
+
+- Response Example
+include::{snippets}/User 회원가입/http-response.adoc[]
+
+== `이미 존재하는 아이디로 인한 회원가입 실패`
+
+- Request Fields
+include::{snippets}/User 회원가입 실패 Exists UserId/request-fields.adoc[]
+
+- Request Example
+include::{snippets}/User 회원가입 실패 Exists UserId/http-request.adoc[]
+
+- Response Fields
+
+- Response Example
+include::{snippets}/User 회원가입 실패 Exists UserId/http-response.adoc[]
+
+== `회원가입 필드 에러로 인한 회원가입 실패`
+
+- Request Fields
+include::{snippets}/User Post Binding 실패/request-fields.adoc[]
+
+- Request Example
+include::{snippets}/User Post Binding 실패/http-request.adoc[]
+
+- Response Fields
+
+- Response Example
+include::{snippets}/User Post Binding 실패/http-response.adoc[]
