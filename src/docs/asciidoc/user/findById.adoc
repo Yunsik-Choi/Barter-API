@@ -1,0 +1,28 @@
+= 유저 식별자로 조회 명세서
+
+== `User Find By Id`
+
+- Path prameters
+include::{snippets}/User Find By Id/path-parameters.adoc[]
+
+- Request Example
+include::{snippets}/User Find By Id/httpie-request.adoc[]
+
+- Response Fields
+include::{snippets}/User Find By Id/response-fields.adoc[]
+
+- Response Example
+include::{snippets}/User Find By Id/http-response.adoc[]
+
+== `User 존재하지 않는 식별자로 조회`
+
+- Path prameters
+include::{snippets}/User 존재하지 않는 식별자로 조회/path-parameters.adoc[]
+
+- Request Example
+include::{snippets}/User 존재하지 않는 식별자로 조회/httpie-request.adoc[]
+
+- Response Fields
+
+- Response Example
+include::{snippets}/User 존재하지 않는 식별자로 조회/http-response.adoc[]
