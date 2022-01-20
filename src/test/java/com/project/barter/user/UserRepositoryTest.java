@@ -1,16 +1,13 @@
 package com.project.barter.user;
 
-import com.project.barter.user.domain.Birthday;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DataJpaTest
@@ -56,5 +53,16 @@ public class UserRepositoryTest {
                 );
     }
 
+
+    @DisplayName("유저 식별자로 조회")
+    @Test
+    public void Find_By_Id(){
+        User user = UserUtils.getCompleteUser();
+        User save = userRepository.save(user);
+        Optional<User> findUser = userRepository.findById(save.getId());
+
+        Assertions.assertThat(findUser).isNotEmpty();
+        Assertions.assertThat(findUser.get().getUserId()).isEqualTo(user.getUserId());
+    }
 
 }
