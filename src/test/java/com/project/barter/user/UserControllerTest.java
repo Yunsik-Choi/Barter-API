@@ -197,6 +197,7 @@ class UserControllerTest {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
         mockMvc.perform(get("/user/{id}",1L))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("User Find By Id",
                         pathParameters(
@@ -224,6 +225,7 @@ class UserControllerTest {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
         mockMvc.perform(get("/user/{id}",999L))
+                .andDo(print())
                 .andExpect(status().isNotFound())
                 .andDo(document("User 존재하지 않는 식별자로 조회",
                         pathParameters(
