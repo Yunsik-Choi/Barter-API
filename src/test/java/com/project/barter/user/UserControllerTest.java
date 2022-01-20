@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Optional;
@@ -18,9 +19,13 @@ import java.util.Optional;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureRestDocs
@@ -185,4 +190,47 @@ class UserControllerTest {
                 ));
     }
 
+    @DisplayName("유저 식별자로 조회")
+    @Test
+    public void Find_By_Id() throws Exception{
+        User user = UserUtils.getCompleteUser();
+        user.setId(1L);
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+
+        mockMvc.perform(get("/user/{id}",1L))
+                .andExpect(status().isOk())
+                .andDo(document("User Find By Id",
+                        pathParameters(
+                                parameterWithName("id").description("유저 식별자")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").description("유저 식별자"),
+                                fieldWithPath("userId").description("유저 로그인 아이디"),
+                                fieldWithPath("password").description("유저 로그인 비밀번호"),
+                                fieldWithPath("name").description("유저 이름"),
+                                fieldWithPath("birthday.year").description("유저 출생년"),
+                                fieldWithPath("birthday.month").description("유저 출생월"),
+                                fieldWithPath("birthday.day").description("유저 출생일"),
+                                fieldWithPath("email").description("유저 이메일"),
+                                fieldWithPath("phoneNumber").description("유저 전화번호")
+                        )
+                ));
+    }
+
+    @DisplayName("유저 존재하지 않는 식별자로 조회")
+    @Test
+    public void Find_By_Unavailable_Id() throws Exception {
+        User user = UserUtils.getCompleteUser();
+        user.setId(1L);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+
+        mockMvc.perform(get("/user/{id}",999L))
+                .andExpect(status().isNotFound())
+                .andDo(document("User Find By Id",
+                        pathParameters(
+                                parameterWithName("id").description("유저 식별자")
+                        )
+                ));
+    }
 }

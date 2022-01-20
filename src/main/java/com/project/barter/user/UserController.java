@@ -6,9 +6,7 @@ import com.project.barter.user.dto.UserPost;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -33,14 +31,20 @@ public class UserController {
     public ResponseEntity login(@RequestBody UserLogin userLogin, HttpServletRequest request){
         Optional<User> loginRequestUser =
                 userRepository.findUserByUserIdAndPassword(userLogin.getUserId(), userLogin.getPassword());
-        if(!loginRequestUser.isPresent()){
+        if(loginRequestUser.isEmpty()){
             return ResponseEntity.badRequest().build();
         }
-        HttpSession session = request.getSession(false);
-        if(session!=null) {
-            session.setAttribute("loginUser", userLogin.getUserId());
-        }
+        HttpSession session = request.getSession();
+        session.setAttribute("loginUser", userLogin.getUserId());
         return ResponseEntity.ok().body(userRepository.findById(loginRequestUser.get().getId()));
     }
 
+    @GetMapping("/user/{id}")
+    public ResponseEntity findById(@PathVariable Long id){
+        Optional<User> findUser = userRepository.findById(id);
+        if(findUser.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(findUser.get());
+    }
 }
