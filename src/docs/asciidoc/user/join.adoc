@@ -9,7 +9,6 @@ include::{snippets}/User 회원가입/request-fields.adoc[]
 include::{snippets}/User 회원가입/http-request.adoc[]
 
 - Response Fields
-include::{snippets}/User 회원가입/response-fields.adoc[]
 
 - Response Example
 include::{snippets}/User 회원가입/http-response.adoc[]

@@ -521,73 +521,9 @@ Host: localhost:8080
 <div class="ulist">
 <ul>
 <li>
-<p>Response Fields</p>
+<p>Response Fields
+Unresolved directive in join.adoc - include::..\..\..\..\build\generated-snippets/User 회원가입/response-fields.adoc[]</p>
 </li>
-</ul>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">유저 식별자</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>userId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">유저 로그인 아이디</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>password</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">유저 로그인 비밀번호</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">유저 이름</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>birthday.year</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">유저 출생년</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>birthday.month</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">유저 출생월</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>birthday.day</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">유저 출생일</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">유저 이메일</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>phoneNumber</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">유저 전화번호</p></td>
-</tr>
-</tbody>
-</table>
-<div class="ulist">
-<ul>
 <li>
 <p>Response Example</p>
 </li>
@@ -595,11 +531,8 @@ Host: localhost:8080
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>HTTP/1.1 200 OK
-Content-Type: application/json
-Content-Length: 164
-
-{"id":1,"userId":"userId","password":"password","name":"이름","birthday":{"year":2020,"month":12,"day":12},"email":"google@gmail.com","phoneNumber":"01012345678"}</pre>
+<pre>HTTP/1.1 302 Found
+Location: /user/1</pre>
 </div>
 </div>
 </div>
@@ -799,7 +732,11 @@ Host: localhost:8080
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>HTTP/1.1 400 Bad Request</pre>
+<pre>HTTP/1.1 400 Bad Request
+Content-Type: application/json
+Content-Length: 156
+
+["Birthday fail Validation","PhoneNumber fail Validation","must not be blank","must be a well-formed email address","must not be blank","must not be blank"]</pre>
 </div>
 </div>
 </div>

@@ -6,7 +6,7 @@
 include::{snippets}/User Find By Id/path-parameters.adoc[]
 
 - Request Example
-include::{snippets}/User Find By Id/httpie-request.adoc[]
+include::{snippets}/User Find By Id/http-request.adoc[]
 
 - Response Fields
 include::{snippets}/User Find By Id/response-fields.adoc[]
@@ -20,7 +20,7 @@ include::{snippets}/User Find By Id/http-response.adoc[]
 include::{snippets}/User 존재하지 않는 식별자로 조회/path-parameters.adoc[]
 
 - Request Example
-include::{snippets}/User 존재하지 않는 식별자로 조회/httpie-request.adoc[]
+include::{snippets}/User 존재하지 않는 식별자로 조회/http-request.adoc[]
 
 - Response Fields
 
