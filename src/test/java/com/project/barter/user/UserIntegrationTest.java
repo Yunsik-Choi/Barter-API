@@ -4,19 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.barter.user.domain.Birthday;
 import com.project.barter.user.dto.UserLogin;
 import com.project.barter.user.dto.UserPost;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import com.project.barter.user.service.UserService;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -24,33 +22,38 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * User회원가입 테스트를 먼저 진행하고
+ * 회원가입 테스트에서 가입된 유저를 전체 테스트에 사용한다.
+ */
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @AutoConfigureRestDocs
-@WebMvcTest(UserController.class)
-class UserControllerTest {
+@AutoConfigureMockMvc
+@SpringBootTest
+class UserIntegrationTest {
 
     @Autowired
     MockMvc mockMvc;
     @Autowired
     ObjectMapper objectMapper;
-    @MockBean
-    UserRepository userRepository;
+    @Autowired
+    UserService userService;
 
+    @Order(1)
     @DisplayName("유저 회원가입 성공")
     @Test
     public void User_Join_Success() throws Exception{
         UserPost userPost = UserUtils.getCompleteUserPost();
 
-        User user = objectMapper.convertValue(userPost,User.class);
-        user.setId(1L);
-        when(userRepository.save(any(User.class))).thenReturn(user);
-
         mockMvc.perform(post("/join")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(userPost)))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/user/1"))
                 .andDo(document("User 회원가입",
                         requestFields(
                                 fieldWithPath("userId").description("유저 로그인 아이디"),
@@ -62,16 +65,8 @@ class UserControllerTest {
                                 fieldWithPath("email").description("유저 이메일"),
                                 fieldWithPath("phoneNumber").description("유저 전화번호")
                         ),
-                        responseFields(
-                                fieldWithPath("id").description("유저 식별자"),
-                                fieldWithPath("userId").description("유저 로그인 아이디"),
-                                fieldWithPath("password").description("유저 로그인 비밀번호"),
-                                fieldWithPath("name").description("유저 이름"),
-                                fieldWithPath("birthday.year").description("유저 출생년"),
-                                fieldWithPath("birthday.month").description("유저 출생월"),
-                                fieldWithPath("birthday.day").description("유저 출생일"),
-                                fieldWithPath("email").description("유저 이메일"),
-                                fieldWithPath("phoneNumber").description("유저 전화번호")
+                        responseHeaders(
+                                headerWithName("Location").description("redirect url")
                         )
                 ));
     }
@@ -80,9 +75,6 @@ class UserControllerTest {
     @Test
     public void Already_Exists_UserId() throws Exception{
         UserPost userPost = UserUtils.getCompleteUserPost();
-        User user = objectMapper.convertValue(userPost,User.class);
-        user.setId(1L);
-        when(userRepository.findUserByUserId(userPost.getUserId())).thenReturn(Optional.of(user));
 
         mockMvc.perform(post("/join")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -138,13 +130,8 @@ class UserControllerTest {
     @DisplayName("유저 로그인 성공")
     @Test
     public void Login_User_Success() throws Exception{
-        User user = UserUtils.getCompleteUser();
-        user.setId(1L);
-        UserLogin userLogin = new UserLogin(user.getUserId(),user.getPassword());
-
-        when(userRepository.findUserByUserIdAndPassword(userLogin.getUserId(),userLogin.getPassword()))
-            .thenReturn(Optional.of(user));
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        UserLogin userLogin =
+                new UserLogin(UserUtils.getCompleteUserPost().getUserId(),UserUtils.getCompleteUserPost().getPassword());
 
         mockMvc.perform(post("/login")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -191,11 +178,6 @@ class UserControllerTest {
     @DisplayName("유저 식별자로 조회")
     @Test
     public void Find_By_Id() throws Exception{
-        User user = UserUtils.getCompleteUser();
-        user.setId(1L);
-
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-
         mockMvc.perform(get("/user/{id}",1L))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -220,10 +202,6 @@ class UserControllerTest {
     @DisplayName("유저 존재하지 않는 식별자로 조회")
     @Test
     public void Find_By_Unavailable_Id() throws Exception {
-        User user = UserUtils.getCompleteUser();
-        user.setId(1L);
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-
         mockMvc.perform(get("/user/{id}",999L))
                 .andDo(print())
                 .andExpect(status().isNotFound())
