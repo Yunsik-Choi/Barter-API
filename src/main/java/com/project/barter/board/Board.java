@@ -1,5 +1,6 @@
 package com.project.barter.board;
 
+import com.project.barter.global.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -11,7 +12,7 @@ import javax.persistence.Id;
 @Builder
 @Getter @Setter
 @Entity
-public class Board {
+public class Board extends BaseTimeEntity {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id

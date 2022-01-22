@@ -104,7 +104,9 @@ class BoardIntegrationTest {
                     responseFields(
                             fieldWithPath("id").description("게시물 식별자"),
                             fieldWithPath("title").description("게시물 제목"),
-                            fieldWithPath("content").description("게시물 내용")
+                            fieldWithPath("content").description("게시물 내용"),
+                            fieldWithPath("createDate").description("게시물 작성 시간"),
+                            fieldWithPath("modifiedDate").description("게시물 수정 시간")
                     )
                 ));
     }
@@ -141,7 +143,9 @@ class BoardIntegrationTest {
                                 fieldWithPath("[]").description("게시물 리스트"),
                                 fieldWithPath("[].id").description("게시물 식별자"),
                                 fieldWithPath("[].title").description("게시물 제목"),
-                                fieldWithPath("[].content").description("게시물 내용")
+                                fieldWithPath("[].content").description("게시물 내용"),
+                                fieldWithPath("[].createDate").description("게시물 작성 시간"),
+                                fieldWithPath("[].modifiedDate").description("게시물 수정 시간")
                         )
                 ));
     }
