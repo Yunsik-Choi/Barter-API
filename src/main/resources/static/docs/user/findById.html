@@ -473,7 +473,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>$ http GET 'http://localhost:8080/user/1'</pre>
+<pre>GET /user/1 HTTP/1.1
+Host: localhost:8080</pre>
 </div>
 </div>
 <div class="ulist">
@@ -600,7 +601,8 @@ Content-Length: 164
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>$ http GET 'http://localhost:8080/user/999'</pre>
+<pre>GET /user/999 HTTP/1.1
+Host: localhost:8080</pre>
 </div>
 </div>
 <div class="ulist">
@@ -623,7 +625,7 @@ Content-Length: 164
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-01-20 15:58:06 +0900
+Last updated 2022-01-22 14:11:54 +0900
 </div>
 </div>
 </body>

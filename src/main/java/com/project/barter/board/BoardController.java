@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 @RequestMapping("/board")
 @RequiredArgsConstructor
@@ -19,8 +20,8 @@ public class BoardController {
 
     @PostMapping
     public void write(@RequestBody BoardPost boardPost, HttpServletResponse response) throws IOException {
-        Board requestBoard = objectMapper.convertValue(boardPost, Board.class);
-        response.sendRedirect("/board"+requestBoard.getId());
+        Board writeBoard = boardRepository.save(objectMapper.convertValue(boardPost, Board.class));
+        response.sendRedirect("/board/"+writeBoard.getId());
     }
 
     @GetMapping
@@ -30,7 +31,10 @@ public class BoardController {
 
     @GetMapping("/{id}")
     public ResponseEntity findById(@PathVariable Long id){
-        return ResponseEntity.ok().body(boardRepository.findById(id));
+        Optional<Board> findBoardById = boardRepository.findById(id);
+        if(findBoardById.isEmpty())
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.ok().body(findBoardById.get());
     }
 
 }

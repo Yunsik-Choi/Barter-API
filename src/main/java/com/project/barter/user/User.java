@@ -15,7 +15,7 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @Entity
 public class User {
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
     @Column(unique = true)

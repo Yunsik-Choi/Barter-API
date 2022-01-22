@@ -1,10 +1,12 @@
 package com.project.barter.user;
 
+import com.project.barter.global.GlobalConst;
 import com.project.barter.user.dto.UserLogin;
 import com.project.barter.user.dto.UserPost;
 import com.project.barter.user.exception.CustomBindingException;
 import com.project.barter.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -34,7 +36,8 @@ public class UserController {
         BindingErrorCheck(bindingResult);
         User loginUser = userService.login(userLogin);
         HttpSession session = request.getSession(true);
-        session.setAttribute("loginUser",loginUser.getUserId());
+        session.setAttribute(GlobalConst.loginSessionAttributeName,loginUser.getUserId());
+        session.setMaxInactiveInterval(GlobalConst.loginSessionInActiveTime);
         return ResponseEntity.ok().body(loginUser);
     }
 
