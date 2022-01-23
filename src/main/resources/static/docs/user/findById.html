@@ -504,7 +504,7 @@ Host: localhost:8080</pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">유저 식별자</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>userId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>loginId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">유저 로그인 아이디</p></td>
 </tr>
@@ -543,6 +543,11 @@ Host: localhost:8080</pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">유저 전화번호</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>boardList</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">게시물 리스트</p></td>
+</tr>
 </tbody>
 </table>
 <div class="ulist">
@@ -556,9 +561,9 @@ Host: localhost:8080</pre>
 <div class="content">
 <pre>HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 164
+Content-Length: 181
 
-{"id":1,"userId":"userId","password":"password","name":"이름","birthday":{"year":2020,"month":12,"day":12},"email":"google@gmail.com","phoneNumber":"01012345678"}</pre>
+{"id":1,"loginId":"loginId","password":"password","name":"이름","birthday":{"year":2020,"month":12,"day":12},"email":"google@gmail.com","phoneNumber":"01012345678","boardList":[]}</pre>
 </div>
 </div>
 </div>

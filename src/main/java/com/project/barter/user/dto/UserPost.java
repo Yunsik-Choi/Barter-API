@@ -14,7 +14,7 @@ import javax.validation.constraints.NotBlank;
 public class UserPost {
 
     @NotBlank
-    private String userId;
+    private String loginId;
     @NotBlank
     private String password;
     @NotBlank

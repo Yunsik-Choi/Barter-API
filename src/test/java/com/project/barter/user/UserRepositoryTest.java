@@ -29,7 +29,7 @@ public class UserRepositoryTest {
 
     @DisplayName("이미 존재하는 아이디 저장 시도시 실패")
     @Test
-    public void Already_Exists_UserId(){
+    public void Already_Exists_LoginId(){
         User user1 = UserUtils.getCompleteUser();
         User user2 = UserUtils.getCompleteUser();
 
@@ -41,15 +41,15 @@ public class UserRepositoryTest {
 
     @DisplayName("유저아이디와 패스워드로 유저 찾기")
     @Test
-    public void Find_By_UserId_And_Password(){
+    public void Find_By_LoginId_And_Password(){
         User user = UserUtils.getCompleteUser();
 
         userRepository.save(user);
 
-        Assertions.assertThat(user.getUserId())
+        Assertions.assertThat(user.getLoginId())
                 .isEqualTo(
-                        userRepository.findUserByUserIdAndPassword(user.getUserId(),user.getPassword())
-                        .get().getUserId()
+                        userRepository.findUserByLoginIdAndPassword(user.getLoginId(),user.getPassword())
+                        .get().getLoginId()
                 );
     }
 
@@ -62,7 +62,7 @@ public class UserRepositoryTest {
         Optional<User> findUser = userRepository.findById(save.getId());
 
         Assertions.assertThat(findUser).isNotEmpty();
-        Assertions.assertThat(findUser.get().getUserId()).isEqualTo(user.getUserId());
+        Assertions.assertThat(findUser.get().getLoginId()).isEqualTo(user.getLoginId());
     }
 
 }

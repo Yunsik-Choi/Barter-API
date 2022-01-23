@@ -1,11 +1,16 @@
 package com.project.barter.board;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.barter.board.dto.BoardDetail;
 import com.project.barter.board.dto.BoardPost;
+import com.project.barter.global.GlobalConst;
+import com.project.barter.user.User;
+import com.project.barter.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
@@ -16,17 +21,25 @@ import java.util.Optional;
 public class BoardController {
 
     private final BoardRepository boardRepository;
+    private final UserService userService;
     private final ObjectMapper objectMapper;
 
     @PostMapping
-    public void write(@RequestBody BoardPost boardPost, HttpServletResponse response) throws IOException {
-        Board writeBoard = boardRepository.save(objectMapper.convertValue(boardPost, Board.class));
+    public void write(@RequestBody BoardPost boardPost, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Board boardRequest = objectMapper.convertValue(boardPost, Board.class);
+        User loginUser = userService.findByLoginId(request.getSession(false).getAttribute(GlobalConst.loginSessionAttributeName).toString());
+        boardRequest.addUser(loginUser);
+        Board writeBoard = boardRepository.save(boardRequest);
         response.sendRedirect("/board/"+writeBoard.getId());
     }
 
     @GetMapping
     public ResponseEntity findAll(){
-        return ResponseEntity.ok().body(boardRepository.findAll());
+        return ResponseEntity.ok().body(boardRepository.findAll().stream().map(board -> {
+            System.out.println(board.getUser().getLoginId());
+            return BoardDetail.byBoard(board);
+        })
+                .toArray(BoardDetail[]::new));
     }
 
     @GetMapping("/{id}")
@@ -34,7 +47,7 @@ public class BoardController {
         Optional<Board> findBoardById = boardRepository.findById(id);
         if(findBoardById.isEmpty())
             return ResponseEntity.notFound().build();
-        return ResponseEntity.ok().body(findBoardById.get());
+        return ResponseEntity.ok().body(BoardDetail.byBoard(findBoardById.get()));
     }
 
 }

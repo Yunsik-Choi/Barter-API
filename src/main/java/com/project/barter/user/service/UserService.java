@@ -12,6 +12,6 @@ public interface UserService {
 
     User findById(Long id);
 
-    void truncateUserTable();
+    User findByLoginId(String loginId);
 
 }

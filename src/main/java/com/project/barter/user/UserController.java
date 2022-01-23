@@ -6,7 +6,6 @@ import com.project.barter.user.dto.UserPost;
 import com.project.barter.user.exception.CustomBindingException;
 import com.project.barter.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -36,7 +35,7 @@ public class UserController {
         BindingErrorCheck(bindingResult);
         User loginUser = userService.login(userLogin);
         HttpSession session = request.getSession(true);
-        session.setAttribute(GlobalConst.loginSessionAttributeName,loginUser.getUserId());
+        session.setAttribute(GlobalConst.loginSessionAttributeName,loginUser.getLoginId());
         session.setMaxInactiveInterval(GlobalConst.loginSessionInActiveTime);
         return ResponseEntity.ok().body(loginUser);
     }

@@ -460,7 +460,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>userId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>loginId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">유저 로그인 아이디</p></td>
 </tr>
@@ -512,10 +512,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre>POST /join HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 157
+Content-Length: 159
 Host: localhost:8080
 
-{"userId":"userId","password":"password","name":"이름","birthday":{"year":2020,"month":12,"day":12},"email":"google@gmail.com","phoneNumber":"01012345678"}</pre>
+{"loginId":"loginId","password":"password","name":"이름","birthday":{"year":2020,"month":12,"day":12},"email":"google@gmail.com","phoneNumber":"01012345678"}</pre>
 </div>
 </div>
 <div class="ulist">
@@ -561,7 +561,7 @@ Location: /user/1</pre>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>userId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>loginId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">유저 로그인 아이디</p></td>
 </tr>
@@ -613,10 +613,10 @@ Location: /user/1</pre>
 <div class="content">
 <pre>POST /join HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 157
+Content-Length: 159
 Host: localhost:8080
 
-{"userId":"userId","password":"password","name":"이름","birthday":{"year":2020,"month":12,"day":12},"email":"google@gmail.com","phoneNumber":"01012345678"}</pre>
+{"loginId":"loginId","password":"password","name":"이름","birthday":{"year":2020,"month":12,"day":12},"email":"google@gmail.com","phoneNumber":"01012345678"}</pre>
 </div>
 </div>
 <div class="ulist">
@@ -661,7 +661,7 @@ Host: localhost:8080
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>userId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>loginId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">유저 로그인 아이디</p></td>
 </tr>
@@ -713,10 +713,10 @@ Host: localhost:8080
 <div class="content">
 <pre>POST /join HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 138
+Content-Length: 139
 Host: localhost:8080
 
-{"userId":" ","password":" ","name":" ","birthday":{"year":3000,"month":12,"day":12},"email":"googl!gmail.com","phoneNumber":"0112345678"}</pre>
+{"loginId":" ","password":" ","name":" ","birthday":{"year":3000,"month":12,"day":12},"email":"googl!gmail.com","phoneNumber":"0112345678"}</pre>
 </div>
 </div>
 <div class="ulist">
@@ -735,7 +735,7 @@ Host: localhost:8080
 Content-Type: application/json
 Content-Length: 156
 
-["PhoneNumber fail Validation","must not be blank","must not be blank","must not be blank","must be a well-formed email address","Birthday fail Validation"]</pre>
+["must not be blank","must not be blank","must not be blank","must be a well-formed email address","PhoneNumber fail Validation","Birthday fail Validation"]</pre>
 </div>
 </div>
 </div>
@@ -743,7 +743,7 @@ Content-Length: 156
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-01-22 14:11:54 +0900
+Last updated 2022-01-23 17:30:05 +0900
 </div>
 </div>
 </body>

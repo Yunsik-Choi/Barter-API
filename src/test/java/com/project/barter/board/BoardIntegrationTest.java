@@ -1,35 +1,43 @@
 package com.project.barter.board;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.barter.board.dto.BoardPost;
 import com.project.barter.global.GlobalConst;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import com.project.barter.user.User;
+import com.project.barter.user.UserRepository;
+import com.project.barter.user.UserUtils;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.ServletContext;
 
-import java.util.Map;
+import java.util.Optional;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
-import static org.springframework.restdocs.http.HttpDocumentation.httpResponse;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 @AutoConfigureRestDocs
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -42,17 +50,23 @@ class BoardIntegrationTest {
     @Autowired
     BoardRepository boardRepository;
     @Autowired
+    UserRepository userRepository;
+    @Autowired
     ServletContext servletContext;
 
+    @Order(1)
     @DisplayName("게시물 쓰기")
     @Test
     public void Board_Write() throws Exception {
         BoardPost boardPost = BoardPost.builder().title("제목").content("내용").build();
-        MockHttpSession mockHttpSession = new MockHttpSession(servletContext);
-        mockHttpSession.setAttribute(GlobalConst.loginSessionAttributeName,"id");
+        User save = userRepository.save(UserUtils.getCompleteUser());
+        User byId = userRepository.findById(1L).get();
+        MockHttpServletRequest mockHttpServletRequest = new MockHttpServletRequest();
+        mockHttpServletRequest.setSession(setSession(save));
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(mockHttpServletRequest));
 
         mockMvc.perform(post("/board")
-                .session(mockHttpSession)
+                .session(setSession(save))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(boardPost)))
                 .andDo(print())
@@ -87,12 +101,15 @@ class BoardIntegrationTest {
                 ));
     }
 
+    @Transactional
     @DisplayName("게시물 식별자로 조회")
     @Test
     public void Board_Find_By_Id() throws Exception {
         BoardPost build = BoardPost.builder().title("제목").content("내용").build();
-        Board saveBoard = boardRepository.save(objectMapper.convertValue(build, Board.class));
-        mockMvc.perform(get("/board/{id}",saveBoard.getId())
+        Board completeBoard = BoardUtils.getCompleteBoard();
+        completeBoard.addUser(userRepository.findById(1L).get());
+        Optional<Board> byId = boardRepository.findById(1L);
+        mockMvc.perform(get("/board/{id}",1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(build)))
                 .andDo(print())
@@ -106,7 +123,8 @@ class BoardIntegrationTest {
                             fieldWithPath("title").description("게시물 제목"),
                             fieldWithPath("content").description("게시물 내용"),
                             fieldWithPath("createDate").description("게시물 작성 시간"),
-                            fieldWithPath("modifiedDate").description("게시물 수정 시간")
+                            fieldWithPath("modifiedDate").description("게시물 수정 시간"),
+                            subsectionWithPath("user").description("게시물 작성 유저")
                     )
                 ));
     }
@@ -127,15 +145,11 @@ class BoardIntegrationTest {
                 ));
     }
 
+    @Transactional
     @DisplayName("게시물 전체 조회")
     @Test
     public void Board_Find_All() throws Exception {
-        BoardPost build = BoardPost.builder().title("제목").content("내용").build();
-        boardRepository.save(objectMapper.convertValue(build,Board.class));
-        boardRepository.save(objectMapper.convertValue(build,Board.class));
-        mockMvc.perform(get("/board")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(build)))
+        mockMvc.perform(get("/board"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("Board 전체 조회",
@@ -145,8 +159,15 @@ class BoardIntegrationTest {
                                 fieldWithPath("[].title").description("게시물 제목"),
                                 fieldWithPath("[].content").description("게시물 내용"),
                                 fieldWithPath("[].createDate").description("게시물 작성 시간"),
-                                fieldWithPath("[].modifiedDate").description("게시물 수정 시간")
+                                fieldWithPath("[].modifiedDate").description("게시물 수정 시간"),
+                                subsectionWithPath("[].user").description("게시물 작성 유저")
                         )
                 ));
+    }
+
+    private MockHttpSession setSession(User user) {
+        MockHttpSession mockHttpSession = new MockHttpSession(servletContext);
+        mockHttpSession.setAttribute(GlobalConst.loginSessionAttributeName,user.getLoginId());
+        return mockHttpSession;
     }
 }

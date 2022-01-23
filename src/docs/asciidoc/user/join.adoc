@@ -16,15 +16,15 @@ include::{snippets}/User 회원가입/http-response.adoc[]
 == `이미 존재하는 아이디로 인한 회원가입 실패`
 
 - Request Fields
-include::{snippets}/User 회원가입 실패 Exists UserId/request-fields.adoc[]
+include::{snippets}/User 회원가입 실패 Exists LoginId/request-fields.adoc[]
 
 - Request Example
-include::{snippets}/User 회원가입 실패 Exists UserId/http-request.adoc[]
+include::{snippets}/User 회원가입 실패 Exists LoginId/http-request.adoc[]
 
 - Response Fields
 
 - Response Example
-include::{snippets}/User 회원가입 실패 Exists UserId/http-response.adoc[]
+include::{snippets}/User 회원가입 실패 Exists LoginId/http-response.adoc[]
 
 == `회원가입 필드 에러로 인한 회원가입 실패`
 
