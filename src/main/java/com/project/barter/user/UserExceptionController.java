@@ -2,7 +2,7 @@ package com.project.barter.user;
 
 import com.project.barter.user.exception.CustomBindingException;
 import com.project.barter.user.exception.UserNotExistsException;
-import com.project.barter.user.exception.UserIdAlreadyExistsException;
+import com.project.barter.user.exception.LoginIdAlreadyExistsException;
 import com.project.barter.user.exception.UserLoginUnavailableException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -24,8 +24,8 @@ public class UserExceptionController {
         return ResponseEntity.notFound().build();
     }
 
-    @ExceptionHandler(UserIdAlreadyExistsException.class)
-    public ResponseEntity userIdAlreadyExists(UserIdAlreadyExistsException exception){
+    @ExceptionHandler(LoginIdAlreadyExistsException.class)
+    public ResponseEntity loginIdAlreadyExists(LoginIdAlreadyExistsException exception){
         return ResponseEntity.badRequest().build();
     }
 

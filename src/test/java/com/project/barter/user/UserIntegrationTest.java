@@ -59,7 +59,7 @@ class UserIntegrationTest {
                 .andExpect(redirectedUrl("/user/1"))
                 .andDo(document("User 회원가입",
                         requestFields(
-                                fieldWithPath("userId").description("유저 로그인 아이디"),
+                                fieldWithPath("loginId").description("유저 로그인 아이디"),
                                 fieldWithPath("password").description("유저 로그인 비밀번호"),
                                 fieldWithPath("name").description("유저 이름"),
                                 fieldWithPath("birthday.year").description("유저 출생년"),
@@ -76,7 +76,7 @@ class UserIntegrationTest {
 
     @DisplayName("이미 존재하는 아이디로 회원가입 시도")
     @Test
-    public void Already_Exists_UserId() throws Exception{
+    public void Already_Exists_LoginId() throws Exception{
         UserPost userPost = UserUtils.getCompleteUserPost();
 
         mockMvc.perform(post("/join")
@@ -84,9 +84,9 @@ class UserIntegrationTest {
                 .content(objectMapper.writeValueAsString(userPost)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andDo(document("User 회원가입 실패 Exists UserId",
+                .andDo(document("User 회원가입 실패 Exists LoginId",
                         requestFields(
-                                fieldWithPath("userId").description("유저 로그인 아이디"),
+                                fieldWithPath("loginId").description("유저 로그인 아이디"),
                                 fieldWithPath("password").description("유저 로그인 비밀번호"),
                                 fieldWithPath("name").description("유저 이름"),
                                 fieldWithPath("birthday.year").description("유저 출생년"),
@@ -102,7 +102,7 @@ class UserIntegrationTest {
     @Test
     public void UserPost_Binding_Error() throws Exception {
         UserPost userPost = UserPost.builder()
-                .userId(" ")
+                .loginId(" ")
                 .password(" ")
                 .name(" ")
                 .birthday(new Birthday(3000,12,12))
@@ -117,7 +117,7 @@ class UserIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andDo(document("User Post Binding 실패",
                         requestFields(
-                                fieldWithPath("userId").description("유저 로그인 아이디"),
+                                fieldWithPath("loginId").description("유저 로그인 아이디"),
                                 fieldWithPath("password").description("유저 로그인 비밀번호"),
                                 fieldWithPath("name").description("유저 이름"),
                                 fieldWithPath("birthday.year").description("유저 출생년"),
@@ -134,7 +134,7 @@ class UserIntegrationTest {
     @Test
     public void Login_User_Success() throws Exception{
         UserLogin userLogin =
-                new UserLogin(UserUtils.getCompleteUserPost().getUserId(),UserUtils.getCompleteUserPost().getPassword());
+                new UserLogin(UserUtils.getCompleteUserPost().getLoginId(),UserUtils.getCompleteUserPost().getPassword());
 
         mockMvc.perform(post("/login")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -143,19 +143,20 @@ class UserIntegrationTest {
                 .andExpect(status().isOk())
                 .andDo(document("User Login",
                         requestFields(
-                            fieldWithPath("userId").description("로그인시 사용하는 유저 아이디"),
+                            fieldWithPath("loginId").description("로그인시 사용하는 유저 아이디"),
                             fieldWithPath("password").description("로그인시 사용하는 비밀번호")
                         ),
                         responseFields(
                                 fieldWithPath("id").description("유저 식별자"),
-                                fieldWithPath("userId").description("유저 로그인 아이디"),
+                                fieldWithPath("loginId").description("유저 로그인 아이디"),
                                 fieldWithPath("password").description("유저 로그인 비밀번호"),
                                 fieldWithPath("name").description("유저 이름"),
                                 fieldWithPath("birthday.year").description("유저 출생년"),
                                 fieldWithPath("birthday.month").description("유저 출생월"),
                                 fieldWithPath("birthday.day").description("유저 출생일"),
                                 fieldWithPath("email").description("유저 이메일"),
-                                fieldWithPath("phoneNumber").description("유저 전화번호")
+                                fieldWithPath("phoneNumber").description("유저 전화번호"),
+                                subsectionWithPath("boardList").description("게시물 리스트")
                         )
                 ));
     }
@@ -172,7 +173,7 @@ class UserIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andDo(document("User Unavailable UserLogin",
                         requestFields(
-                                fieldWithPath("userId").description("로그인시 사용하는 유저아이디"),
+                                fieldWithPath("loginId").description("로그인시 사용하는 유저아이디"),
                                 fieldWithPath("password").description("로그인시 사용하는 유저 비밀번호")
                         )
                 ));
@@ -190,14 +191,15 @@ class UserIntegrationTest {
                         ),
                         responseFields(
                                 fieldWithPath("id").description("유저 식별자"),
-                                fieldWithPath("userId").description("유저 로그인 아이디"),
+                                fieldWithPath("loginId").description("유저 로그인 아이디"),
                                 fieldWithPath("password").description("유저 로그인 비밀번호"),
                                 fieldWithPath("name").description("유저 이름"),
                                 fieldWithPath("birthday.year").description("유저 출생년"),
                                 fieldWithPath("birthday.month").description("유저 출생월"),
                                 fieldWithPath("birthday.day").description("유저 출생일"),
                                 fieldWithPath("email").description("유저 이메일"),
-                                fieldWithPath("phoneNumber").description("유저 전화번호")
+                                fieldWithPath("phoneNumber").description("유저 전화번호"),
+                                subsectionWithPath("boardList").description("게시물 리스트")
                         )
                 ));
     }

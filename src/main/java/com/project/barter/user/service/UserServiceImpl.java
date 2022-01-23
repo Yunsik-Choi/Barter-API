@@ -6,7 +6,7 @@ import com.project.barter.user.UserRepository;
 import com.project.barter.user.dto.UserLogin;
 import com.project.barter.user.dto.UserPost;
 import com.project.barter.user.exception.UserNotExistsException;
-import com.project.barter.user.exception.UserIdAlreadyExistsException;
+import com.project.barter.user.exception.LoginIdAlreadyExistsException;
 import com.project.barter.user.exception.UserLoginUnavailableException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,20 +24,20 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public Long join(UserPost userPost) {
-        Optional<User> userByUserId = userRepository.findUserByUserId(userPost.getUserId());
-        if(userByUserId.isPresent())
-            throw new UserIdAlreadyExistsException();
+        Optional<User> userByLoginId = userRepository.findUserByLoginId(userPost.getLoginId());
+        if(userByLoginId.isPresent())
+            throw new LoginIdAlreadyExistsException();
         User joinUser = userRepository.save(objectMapper.convertValue(userPost, User.class));
         return joinUser.getId();
     }
 
     @Override
     public User login(UserLogin userLogin) {
-        Optional<User> userByUserIdAndPassword =
-                userRepository.findUserByUserIdAndPassword(userLogin.getUserId(), userLogin.getPassword());
-        if(userByUserIdAndPassword.isEmpty())
+        Optional<User> userByLoginIdAndPassword =
+                userRepository.findUserByLoginIdAndPassword(userLogin.getLoginId(), userLogin.getPassword());
+        if(userByLoginIdAndPassword.isEmpty())
             throw new UserLoginUnavailableException();
-        return userByUserIdAndPassword.get();
+        return userByLoginIdAndPassword.get();
     }
 
     @Override
@@ -49,7 +49,10 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void truncateUserTable() {
-        userRepository.truncateMyTable();
+    public User findByLoginId(String loginId) {
+        Optional<User> userByLoginId = userRepository.findUserByLoginId(loginId);
+        if(userByLoginId.isEmpty())
+            throw new UserNotExistsException();
+        return userByLoginId.get();
     }
 }

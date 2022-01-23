@@ -11,12 +11,12 @@ import javax.validation.constraints.NotEmpty;
 public class UserLogin {
 
     @NotEmpty
-    private String userId;
+    private String loginId;
     @NotEmpty
     private String password;
 
-    public UserLogin(String userId, String password) {
-        this.userId = userId;
+    public UserLogin(String loginId, String password) {
+        this.loginId = loginId;
         this.password = password;
     }
 }

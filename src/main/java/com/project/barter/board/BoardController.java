@@ -1,13 +1,19 @@
 package com.project.barter.board;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.barter.board.dto.BoardDetail;
 import com.project.barter.board.dto.BoardPost;
+import com.project.barter.global.GlobalConst;
+import com.project.barter.user.User;
+import com.project.barter.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Optional;
 
 @RequestMapping("/board")
 @RequiredArgsConstructor
@@ -15,12 +21,33 @@ import org.springframework.web.bind.annotation.RestController;
 public class BoardController {
 
     private final BoardRepository boardRepository;
+    private final UserService userService;
     private final ObjectMapper objectMapper;
 
     @PostMapping
-    public ResponseEntity write(@RequestBody BoardPost boardPost){
-        Board requestBoard = objectMapper.convertValue(boardPost, Board.class);
-        return ResponseEntity.ok().body(boardRepository.save(requestBoard));
+    public void write(@RequestBody BoardPost boardPost, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Board boardRequest = objectMapper.convertValue(boardPost, Board.class);
+        User loginUser = userService.findByLoginId(request.getSession(false).getAttribute(GlobalConst.loginSessionAttributeName).toString());
+        boardRequest.addUser(loginUser);
+        Board writeBoard = boardRepository.save(boardRequest);
+        response.sendRedirect("/board/"+writeBoard.getId());
+    }
+
+    @GetMapping
+    public ResponseEntity findAll(){
+        return ResponseEntity.ok().body(boardRepository.findAll().stream().map(board -> {
+            System.out.println(board.getUser().getLoginId());
+            return BoardDetail.byBoard(board);
+        })
+                .toArray(BoardDetail[]::new));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity findById(@PathVariable Long id){
+        Optional<Board> findBoardById = boardRepository.findById(id);
+        if(findBoardById.isEmpty())
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.ok().body(BoardDetail.byBoard(findBoardById.get()));
     }
 
 }

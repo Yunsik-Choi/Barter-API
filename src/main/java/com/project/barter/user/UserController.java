@@ -1,5 +1,6 @@
 package com.project.barter.user;
 
+import com.project.barter.global.GlobalConst;
 import com.project.barter.user.dto.UserLogin;
 import com.project.barter.user.dto.UserPost;
 import com.project.barter.user.exception.CustomBindingException;
@@ -34,7 +35,8 @@ public class UserController {
         BindingErrorCheck(bindingResult);
         User loginUser = userService.login(userLogin);
         HttpSession session = request.getSession(true);
-        session.setAttribute("loginUser",loginUser.getUserId());
+        session.setAttribute(GlobalConst.loginSessionAttributeName,loginUser.getLoginId());
+        session.setMaxInactiveInterval(GlobalConst.loginSessionInActiveTime);
         return ResponseEntity.ok().body(loginUser);
     }
 
