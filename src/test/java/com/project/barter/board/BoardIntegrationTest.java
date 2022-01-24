@@ -17,12 +17,10 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 
-import java.util.Optional;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
@@ -30,8 +28,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -60,10 +57,6 @@ class BoardIntegrationTest {
     public void Board_Write() throws Exception {
         BoardPost boardPost = BoardPost.builder().title("제목").content("내용").build();
         User save = userRepository.save(UserUtils.getCompleteUser());
-        User byId = userRepository.findById(1L).get();
-        MockHttpServletRequest mockHttpServletRequest = new MockHttpServletRequest();
-        mockHttpServletRequest.setSession(setSession(save));
-        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(mockHttpServletRequest));
 
         mockMvc.perform(post("/board")
                 .session(setSession(save))
@@ -101,17 +94,10 @@ class BoardIntegrationTest {
                 ));
     }
 
-    @Transactional
     @DisplayName("게시물 식별자로 조회")
     @Test
     public void Board_Find_By_Id() throws Exception {
-        BoardPost build = BoardPost.builder().title("제목").content("내용").build();
-        Board completeBoard = BoardUtils.getCompleteBoard();
-        completeBoard.addUser(userRepository.findById(1L).get());
-        Optional<Board> byId = boardRepository.findById(1L);
-        mockMvc.perform(get("/board/{id}",1L)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(build)))
+        mockMvc.perform(get("/board/{id}",1L))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("Board 식별자로 조회",
@@ -132,10 +118,7 @@ class BoardIntegrationTest {
     @DisplayName("게시물 존재하지 않는 식별자로 조회시 404에러 반환")
     @Test
     public void Board_Find_By_Id_No_Exists() throws Exception {
-        BoardPost build = BoardPost.builder().title("제목").content("내용").build();
-        mockMvc.perform(get("/board/{id}",999L)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(build)))
+        mockMvc.perform(get("/board/{id}",Long.MAX_VALUE))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andDo(document("Board 존재하지 않는 식별자로 조회",
@@ -145,7 +128,6 @@ class BoardIntegrationTest {
                 ));
     }
 
-    @Transactional
     @DisplayName("게시물 전체 조회")
     @Test
     public void Board_Find_All() throws Exception {
@@ -161,6 +143,26 @@ class BoardIntegrationTest {
                                 fieldWithPath("[].createDate").description("게시물 작성 시간"),
                                 fieldWithPath("[].modifiedDate").description("게시물 수정 시간"),
                                 subsectionWithPath("[].user").description("게시물 작성 유저")
+                        )
+                ));
+    }
+
+    @DisplayName("게시물 미리보기 전체 조회")
+    @Test
+    public void Board_Find_All_Preview() throws Exception {
+        mockMvc.perform(get("/board").param("preview",Boolean.TRUE.toString()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("Board 미리보기 전체 조회",
+                        requestParameters(
+                                parameterWithName("preview").description("게시물 preview조회")
+                        ),
+                        responseFields(
+                                fieldWithPath("[]").description("게시물 리스트"),
+                                fieldWithPath("[].id").description("게시물 식별자"),
+                                fieldWithPath("[].title").description("게시물 제목"),
+                                fieldWithPath("[].createDate").description("게시물 작성 시간"),
+                                fieldWithPath("[].loginId").description("게시물 작성자 로그인 아이디")
                         )
                 ));
     }

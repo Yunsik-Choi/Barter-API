@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -207,7 +208,7 @@ class UserIntegrationTest {
     @DisplayName("유저 존재하지 않는 식별자로 조회")
     @Test
     public void Find_By_Unavailable_Id() throws Exception {
-        mockMvc.perform(get("/user/{id}",999L))
+        mockMvc.perform(get("/user/{id}",Long.MAX_VALUE))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andDo(document("User 존재하지 않는 식별자로 조회",
