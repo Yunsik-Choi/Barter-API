@@ -1,22 +1,19 @@
 package com.project.barter.user.validator;
 
-import com.project.barter.user.domain.Birthday;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.time.LocalDate;
 
-public class BirthdayValidator implements ConstraintValidator<Birth,Birthday> {
+public class BirthdayValidator implements ConstraintValidator<Birth,LocalDate> {
 
     @Override
     public void initialize(Birth constraintAnnotation) {
     }
 
     @Override
-    public boolean isValid(Birthday birthday, ConstraintValidatorContext context) {
+    public boolean isValid(LocalDate birthday, ConstraintValidatorContext context) {
         LocalDate tomorrow = LocalDate.now().plusDays(1L);
-        LocalDate past = LocalDate.of(birthday.getYear(), birthday.getMonth(), birthday.getDay());
-        if(tomorrow.isAfter(past)){
+        if(tomorrow.isAfter(birthday)){
             return true;
         }
         return false;

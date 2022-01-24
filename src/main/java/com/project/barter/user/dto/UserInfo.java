@@ -1,8 +1,9 @@
 package com.project.barter.user.dto;
 
 import com.project.barter.user.User;
-import com.project.barter.user.domain.Birthday;
 import lombok.*;
+
+import java.time.LocalDate;
 
 @AllArgsConstructor @NoArgsConstructor
 @Builder
@@ -13,7 +14,7 @@ public class UserInfo {
     private String loginId;
     private String password;
     private String name;
-    private Birthday birthday;
+    private LocalDate birthday;
     private String email;
     private String phoneNumber;
 

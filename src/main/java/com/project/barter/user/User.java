@@ -1,15 +1,14 @@
 package com.project.barter.user;
 
 import com.project.barter.board.Board;
-import com.project.barter.user.domain.Birthday;
-import com.project.barter.user.validator.Birth;
 import com.project.barter.user.validator.PhoneNumber;
 import lombok.*;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,9 +27,8 @@ public class User {
     private String password;
     @NotBlank
     private String name;
-    @Birth
-    @Embedded
-    private Birthday birthday;
+    @NotNull
+    private LocalDate birthday;
     @Email
     private String email;
     @PhoneNumber

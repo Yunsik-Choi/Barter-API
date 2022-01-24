@@ -1,7 +1,6 @@
 package com.project.barter.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.barter.user.domain.Birthday;
 import com.project.barter.user.dto.UserLogin;
 import com.project.barter.user.dto.UserPost;
 import com.project.barter.user.service.UserService;
@@ -12,8 +11,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.time.LocalDate;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
@@ -51,7 +51,7 @@ class UserIntegrationTest {
     @Test
     public void User_Join_Success() throws Exception{
         UserPost userPost = UserUtils.getCompleteUserPost();
-
+        System.out.println(objectMapper.writeValueAsString(userPost));
         mockMvc.perform(post("/join")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(userPost)))
@@ -63,9 +63,7 @@ class UserIntegrationTest {
                                 fieldWithPath("loginId").description("유저 로그인 아이디"),
                                 fieldWithPath("password").description("유저 로그인 비밀번호"),
                                 fieldWithPath("name").description("유저 이름"),
-                                fieldWithPath("birthday.year").description("유저 출생년"),
-                                fieldWithPath("birthday.month").description("유저 출생월"),
-                                fieldWithPath("birthday.day").description("유저 출생일"),
+                                fieldWithPath("birthday").description("유저 생년월일"),
                                 fieldWithPath("email").description("유저 이메일"),
                                 fieldWithPath("phoneNumber").description("유저 전화번호")
                         ),
@@ -90,9 +88,7 @@ class UserIntegrationTest {
                                 fieldWithPath("loginId").description("유저 로그인 아이디"),
                                 fieldWithPath("password").description("유저 로그인 비밀번호"),
                                 fieldWithPath("name").description("유저 이름"),
-                                fieldWithPath("birthday.year").description("유저 출생년"),
-                                fieldWithPath("birthday.month").description("유저 출생월"),
-                                fieldWithPath("birthday.day").description("유저 출생일"),
+                                fieldWithPath("birthday").description("유저 생년월일"),
                                 fieldWithPath("email").description("유저 이메일"),
                                 fieldWithPath("phoneNumber").description("유저 전화번호")
                         )
@@ -106,7 +102,7 @@ class UserIntegrationTest {
                 .loginId(" ")
                 .password(" ")
                 .name(" ")
-                .birthday(new Birthday(3000,12,12))
+                .birthday(LocalDate.of(3000,12,12))
                 .email("googl!gmail.com")
                 .phoneNumber("0112345678")
                 .build();
@@ -121,9 +117,7 @@ class UserIntegrationTest {
                                 fieldWithPath("loginId").description("유저 로그인 아이디"),
                                 fieldWithPath("password").description("유저 로그인 비밀번호"),
                                 fieldWithPath("name").description("유저 이름"),
-                                fieldWithPath("birthday.year").description("유저 출생년"),
-                                fieldWithPath("birthday.month").description("유저 출생월"),
-                                fieldWithPath("birthday.day").description("유저 출생일"),
+                                fieldWithPath("birthday").description("유저 생년월일"),
                                 fieldWithPath("email").description("유저 이메일"),
                                 fieldWithPath("phoneNumber").description("유저 전화번호")
                         )
@@ -152,9 +146,7 @@ class UserIntegrationTest {
                                 fieldWithPath("loginId").description("유저 로그인 아이디"),
                                 fieldWithPath("password").description("유저 로그인 비밀번호"),
                                 fieldWithPath("name").description("유저 이름"),
-                                fieldWithPath("birthday.year").description("유저 출생년"),
-                                fieldWithPath("birthday.month").description("유저 출생월"),
-                                fieldWithPath("birthday.day").description("유저 출생일"),
+                                fieldWithPath("birthday").description("유저 생년월일"),
                                 fieldWithPath("email").description("유저 이메일"),
                                 fieldWithPath("phoneNumber").description("유저 전화번호"),
                                 subsectionWithPath("boardList").description("게시물 리스트")
@@ -195,9 +187,7 @@ class UserIntegrationTest {
                                 fieldWithPath("loginId").description("유저 로그인 아이디"),
                                 fieldWithPath("password").description("유저 로그인 비밀번호"),
                                 fieldWithPath("name").description("유저 이름"),
-                                fieldWithPath("birthday.year").description("유저 출생년"),
-                                fieldWithPath("birthday.month").description("유저 출생월"),
-                                fieldWithPath("birthday.day").description("유저 출생일"),
+                                fieldWithPath("birthday").description("유저 생년월일"),
                                 fieldWithPath("email").description("유저 이메일"),
                                 fieldWithPath("phoneNumber").description("유저 전화번호"),
                                 subsectionWithPath("boardList").description("게시물 리스트")
