@@ -12,6 +12,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     Optional<User> findUserByLoginIdAndPassword(String loginId, String password);
 
+
     @Modifying
     @Query(
             value = "truncate table user",

@@ -1,11 +1,13 @@
 package com.project.barter.board;
 
+import com.project.barter.comment.Comment;
 import com.project.barter.global.BaseTimeEntity;
 import com.project.barter.user.User;
 import lombok.*;
-import org.springframework.data.annotation.CreatedBy;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor @NoArgsConstructor
 @Builder
@@ -21,7 +23,11 @@ public class Board extends BaseTimeEntity {
 
     private String content;
 
-    @ManyToOne
+    @OneToMany
+    @JoinColumn(name = "BOARD_ID")
+    private final List<Comment> commentList = new ArrayList<>();
+
+    @ManyToOne()
     @JoinColumn(name = "USER_ID")
     private User user;
 
