@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Optional;
 
 @RequestMapping("/board")
@@ -53,8 +54,10 @@ public class BoardController {
     }
 
     @PostMapping("/{id}/comment")
-    public ResponseEntity comment(@PathVariable Long id, @RequestBody CommentPost commentPost){
-        Board board = boardService.addComment(id, commentPost);
-        return ResponseEntity.ok().body(BoardDetail.byBoard(board));
+    public void comment(@PathVariable Long id, @RequestBody CommentPost commentPost,
+                                  HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String loginId = request.getSession().getAttribute(GlobalConst.loginSessionAttributeName).toString();
+        boardService.addComment(id, commentPost, loginId);
+        response.sendRedirect("/board/"+id);
     }
 }

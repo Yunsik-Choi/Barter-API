@@ -1,5 +1,6 @@
 package com.project.barter.board;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.barter.board.dto.BoardPost;
 import com.project.barter.global.GlobalConst;
@@ -159,6 +160,28 @@ class BoardIntegrationTest {
                                 fieldWithPath("[].title").description("게시물 제목"),
                                 fieldWithPath("[].createDate").description("게시물 작성 시간"),
                                 fieldWithPath("[].loginId").description("게시물 작성자 로그인 아이디")
+                        )
+                ));
+    }
+
+    @DisplayName("게시물에 댓글 남기기")
+    @Test
+    public void Board_Add_Comment() throws Exception {
+        User saveUser = userRepository.save(UserUtils.getCompleteUser());
+        Board saveBoard = boardRepository.save(BoardUtils.getCompleteBoard());
+        mockMvc.perform(post("/board/{id}/comment",saveBoard.getId())
+                .session(setSession(saveUser))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(BoardUtils.getCommentPost())))
+                .andDo(print())
+                .andExpect(status().isFound())
+                .andExpect(header().exists("Location"))
+                .andDo(document("게시물에 댓글 남기기",
+                        requestFields(
+                                fieldWithPath("content").description("댓글 내용")
+                        ),
+                        responseHeaders(
+                                headerWithName("Location").description("redirect url")
                         )
                 ));
     }
