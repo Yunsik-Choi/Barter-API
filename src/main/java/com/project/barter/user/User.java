@@ -1,6 +1,7 @@
 package com.project.barter.user;
 
 import com.project.barter.board.Board;
+import com.project.barter.user.validator.Birth;
 import com.project.barter.user.validator.PhoneNumber;
 import lombok.*;
 
@@ -17,8 +18,9 @@ import java.util.List;
 @Builder
 @Entity
 public class User {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "USER_ID")
     private Long id;
     @Column(unique = true)
     @NotBlank
@@ -28,6 +30,7 @@ public class User {
     @NotBlank
     private String name;
     @NotNull
+    @Birth
     private LocalDate birthday;
     @Email
     private String email;

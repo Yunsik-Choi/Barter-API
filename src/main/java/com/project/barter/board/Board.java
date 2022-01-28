@@ -15,20 +15,17 @@ import java.util.List;
 @Entity
 public class Board extends BaseTimeEntity {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "BOARD_ID")
     private Long id;
 
     private String title;
 
     private String content;
 
-    @OneToMany
-    @JoinColumn(name = "BOARD_ID")
-    private final List<Comment> commentList = new ArrayList<>();
-
-    @ManyToOne()
-    @JoinColumn(name = "USER_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "BOARD_WRITER_USER_ID")
     private User user;
 
     public void addUser(User user){

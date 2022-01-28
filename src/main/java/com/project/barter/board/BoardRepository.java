@@ -14,10 +14,11 @@ public interface BoardRepository extends JpaRepository<Board,Long> {
     List<BoardPreview> findBoardPreviewAll();
 
     @Override
-    @EntityGraph(attributePaths= {"commentList","user","commentList.subCommentList"})
+    @EntityGraph(attributePaths= {"user"})
     List<Board> findAll();
 
     @Override
-    @EntityGraph(attributePaths= {"commentList","user","commentList.subCommentList"})
+    @EntityGraph(attributePaths= {"user"})
     Optional<Board> findById(Long id);
+
 }
