@@ -12,4 +12,22 @@ public class EntityBody<T> {
 
     private T data;
 
+    public EntityBody(int status, String message, T data) {
+        this.status = status;
+        this.message = message;
+        this.data = data;
+    }
+
+    public EntityBody(String message, T data) {
+        this.status = 200;
+        this.message = message;
+        this.data = data;
+    }
+
+    public EntityBody(T data) {
+        this.status = 200;
+        this.message = "SUCCESS";
+        this.data = data;
+    }
+
 }

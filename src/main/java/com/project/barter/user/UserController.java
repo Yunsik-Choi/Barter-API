@@ -1,6 +1,9 @@
 package com.project.barter.user;
 
 import com.project.barter.global.GlobalConst;
+import com.project.barter.global.dto.EntityBody;
+import com.project.barter.user.dto.LoginResponse;
+import com.project.barter.user.dto.UserInfo;
 import com.project.barter.user.dto.UserLogin;
 import com.project.barter.user.dto.UserPost;
 import com.project.barter.user.exception.CustomBindingException;
@@ -26,23 +29,28 @@ public class UserController {
     public void join(@Validated @RequestBody UserPost userPost, BindingResult bindingResult,
                                                              HttpServletResponse response) throws IOException {
         BindingErrorCheck(bindingResult);
-        Long joinUserPK = userService.join(userPost);
-        response.sendRedirect("/user/"+joinUserPK);
+        Long userId = userService.join(userPost);
+        response.sendRedirect("/user/"+userId);
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody UserLogin userLogin, BindingResult bindingResult, HttpServletRequest request){
+    public ResponseEntity<EntityBody<LoginResponse>> login(@RequestBody UserLogin userLogin, BindingResult bindingResult, HttpServletRequest request){
         BindingErrorCheck(bindingResult);
-        User loginUser = userService.login(userLogin);
-        HttpSession session = request.getSession(true);
-        session.setAttribute(GlobalConst.loginSessionAttributeName,loginUser.getLoginId());
-        session.setMaxInactiveInterval(GlobalConst.loginSessionInActiveTime);
-        return ResponseEntity.ok().body(loginUser);
+        User user = userService.login(userLogin);
+        setLoginSession(request, user.getLoginId());
+        return ResponseEntity.ok().body(new EntityBody<>(LoginResponse.byUser(user)));
     }
 
     @GetMapping("/user/{id}")
-    public ResponseEntity findById(@PathVariable Long id){
-        return ResponseEntity.ok().body(userService.findById(id));
+    public ResponseEntity<EntityBody<UserInfo>> findById(@PathVariable Long id){
+        User user = userService.findById(id);
+        return ResponseEntity.ok().body(new EntityBody<>(UserInfo.byUser(user)));
+    }
+
+    private void setLoginSession(HttpServletRequest request, String loginId) {
+        HttpSession session = request.getSession(true);
+        session.setAttribute(GlobalConst.loginSessionAttributeName,loginId);
+        session.setMaxInactiveInterval(GlobalConst.loginSessionInActiveTime);
     }
 
     private void BindingErrorCheck(BindingResult bindingResult) {

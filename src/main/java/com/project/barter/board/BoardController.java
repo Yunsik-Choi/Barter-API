@@ -1,9 +1,13 @@
 package com.project.barter.board;
 
 import com.project.barter.board.dto.BoardPost;
+import com.project.barter.board.dto.BoardPreview;
+import com.project.barter.board.dto.BoardResponse;
+import com.project.barter.board.dto.BoardWithComment;
 import com.project.barter.board.service.BoardService;
 import com.project.barter.comment.dto.CommentPost;
 import com.project.barter.global.GlobalConst;
+import com.project.barter.global.dto.EntityBody;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @RequestMapping("/board")
 @RequiredArgsConstructor
@@ -28,18 +33,20 @@ public class BoardController {
     }
 
     @GetMapping("/preview")
-    public ResponseEntity findPreview(){
-        return ResponseEntity.ok().body(boardService.findBoardPreviewAll());
+    public ResponseEntity<EntityBody<List<BoardPreview>>> findPreview(){
+        List<BoardPreview> boardPreviewAll = boardService.findBoardPreviewAll();
+        return ResponseEntity.ok().body(new EntityBody<>(boardPreviewAll));
     }
 
     @GetMapping
-    public ResponseEntity findAll(){
-        return ResponseEntity.ok().body(boardService.findAll());
+    public ResponseEntity<EntityBody<List<BoardResponse>>> findAll(){
+        List<BoardResponse> boardResponseList = boardService.findAll();
+        return ResponseEntity.ok().body(new EntityBody<>(boardResponseList));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity findById(@PathVariable Long id){
-        return ResponseEntity.ok().body(boardService.findBoardWithCommentById(id));
+    public ResponseEntity<EntityBody<BoardWithComment>> findById(@PathVariable Long id){
+        return ResponseEntity.ok().body(new EntityBody<>(boardService.findBoardWithCommentById(id)));
     }
 
     @PostMapping("/{id}/comment")
