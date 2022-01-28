@@ -1,6 +1,5 @@
 package com.project.barter.board;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.barter.board.dto.BoardPost;
 import com.project.barter.global.GlobalConst;
@@ -20,8 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import javax.servlet.ServletContext;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -91,6 +89,28 @@ class BoardIntegrationTest {
                 ));
     }
 
+    @DisplayName("로그인 하지 않은 사용자도 게시물 조회가 가능하다.")
+    @Test
+    public void Board_GET_UnAuthorized() throws Exception {
+        mockMvc.perform(get("/board/{id}",1L))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("Board 로그인하지 않은 사용자 조회",
+                        pathParameters(
+                                parameterWithName("id").description("게시물 식별자")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").description("게시물 식별자"),
+                                fieldWithPath("title").description("게시물 제목"),
+                                fieldWithPath("content").description("게시물 내용"),
+                                fieldWithPath("writeTime").description("게시물 작성 시간"),
+                                subsectionWithPath("user").description("게시물 작성 유저 정보"),
+                                subsectionWithPath("commentList.[]").description("게시물 댓글 리스트")
+
+                        )
+                ));
+    }
+
     @DisplayName("게시물 식별자로 조회")
     @Test
     public void Board_Find_By_Id() throws Exception {
@@ -105,9 +125,9 @@ class BoardIntegrationTest {
                             fieldWithPath("id").description("게시물 식별자"),
                             fieldWithPath("title").description("게시물 제목"),
                             fieldWithPath("content").description("게시물 내용"),
-                            fieldWithPath("createDate").description("게시물 작성 시간"),
-                            fieldWithPath("modifiedDate").description("게시물 수정 시간"),
-                            subsectionWithPath("user").description("게시물 작성 유저")
+                            fieldWithPath("writeTime").description("게시물 작성 시간"),
+                            subsectionWithPath("user").description("게시물 작성 유저 정보"),
+                            subsectionWithPath("commentList.[]").description("게시물 댓글 리스트")
                     )
                 ));
     }
@@ -137,9 +157,8 @@ class BoardIntegrationTest {
                                 fieldWithPath("[].id").description("게시물 식별자"),
                                 fieldWithPath("[].title").description("게시물 제목"),
                                 fieldWithPath("[].content").description("게시물 내용"),
-                                fieldWithPath("[].createDate").description("게시물 작성 시간"),
-                                fieldWithPath("[].modifiedDate").description("게시물 수정 시간"),
-                                subsectionWithPath("[].user").description("게시물 작성 유저")
+                                fieldWithPath("[].writeTime").description("게시물 작성 시간"),
+                                subsectionWithPath("[].user").description("게시물 작성 유저 정보")
                         )
                 ));
     }
@@ -147,18 +166,15 @@ class BoardIntegrationTest {
     @DisplayName("게시물 미리보기 전체 조회")
     @Test
     public void Board_Find_All_Preview() throws Exception {
-        mockMvc.perform(get("/board").param("preview",Boolean.TRUE.toString()))
+        mockMvc.perform(get("/board/preview"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("Board 미리보기 전체 조회",
-                        requestParameters(
-                                parameterWithName("preview").description("게시물 preview조회")
-                        ),
                         responseFields(
                                 fieldWithPath("[]").description("게시물 리스트"),
                                 fieldWithPath("[].id").description("게시물 식별자"),
                                 fieldWithPath("[].title").description("게시물 제목"),
-                                fieldWithPath("[].createDate").description("게시물 작성 시간"),
+                                fieldWithPath("[].writeTime").description("게시물 작성 시간"),
                                 fieldWithPath("[].loginId").description("게시물 작성자 로그인 아이디")
                         )
                 ));
@@ -167,7 +183,7 @@ class BoardIntegrationTest {
     @DisplayName("게시물에 댓글 남기기")
     @Test
     public void Board_Add_Comment() throws Exception {
-        User saveUser = userRepository.save(UserUtils.getCompleteUser());
+        User saveUser = userRepository.findById(1L).get();
         Board saveBoard = boardRepository.save(BoardUtils.getCompleteBoard());
         mockMvc.perform(post("/board/{id}/comment",saveBoard.getId())
                 .session(setSession(saveUser))
