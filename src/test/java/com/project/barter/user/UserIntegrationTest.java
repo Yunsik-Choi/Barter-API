@@ -142,14 +142,11 @@ class UserIntegrationTest {
                             fieldWithPath("password").description("로그인시 사용하는 비밀번호")
                         ),
                         responseFields(
-                                fieldWithPath("id").description("유저 식별자"),
-                                fieldWithPath("loginId").description("유저 로그인 아이디"),
-                                fieldWithPath("password").description("유저 로그인 비밀번호"),
-                                fieldWithPath("name").description("유저 이름"),
-                                fieldWithPath("birthday").description("유저 생년월일"),
-                                fieldWithPath("email").description("유저 이메일"),
-                                fieldWithPath("phoneNumber").description("유저 전화번호"),
-                                subsectionWithPath("boardList").description("게시물 리스트")
+                                fieldWithPath("status").description("Http 상태코드"),
+                                fieldWithPath("message").description("응답 메세지"),
+                                fieldWithPath("data.id").description("유저 식별자"),
+                                fieldWithPath("data.loginId").description("유저 로그인 아이디"),
+                                fieldWithPath("data.name").description("유저 이름")
                         )
                 ));
     }
@@ -183,14 +180,15 @@ class UserIntegrationTest {
                                 parameterWithName("id").description("유저 식별자")
                         ),
                         responseFields(
-                                fieldWithPath("id").description("유저 식별자"),
-                                fieldWithPath("loginId").description("유저 로그인 아이디"),
-                                fieldWithPath("password").description("유저 로그인 비밀번호"),
-                                fieldWithPath("name").description("유저 이름"),
-                                fieldWithPath("birthday").description("유저 생년월일"),
-                                fieldWithPath("email").description("유저 이메일"),
-                                fieldWithPath("phoneNumber").description("유저 전화번호"),
-                                subsectionWithPath("boardList").description("게시물 리스트")
+                                fieldWithPath("status").description("Http 상태코드"),
+                                fieldWithPath("message").description("응답 메세지"),
+                                fieldWithPath("data.id").description("유저 식별자"),
+                                fieldWithPath("data.loginId").description("유저 로그인 아이디"),
+                                fieldWithPath("data.password").description("유저 로그인 비밀번호"),
+                                fieldWithPath("data.name").description("유저 이름"),
+                                fieldWithPath("data.birthday").description("유저 생년월일"),
+                                fieldWithPath("data.email").description("유저 이메일"),
+                                fieldWithPath("data.phoneNumber").description("유저 전화번호")
                         )
                 ));
     }
