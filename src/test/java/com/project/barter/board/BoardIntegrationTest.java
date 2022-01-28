@@ -2,6 +2,8 @@ package com.project.barter.board;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.barter.board.dto.BoardPost;
+import com.project.barter.comment.Comment;
+import com.project.barter.comment.CommentRepository;
 import com.project.barter.global.GlobalConst;
 import com.project.barter.user.User;
 import com.project.barter.user.UserRepository;
@@ -17,6 +19,9 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.servlet.ServletContext;
+
+import java.util.List;
+import java.util.Optional;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
@@ -41,6 +46,8 @@ class BoardIntegrationTest {
     ObjectMapper objectMapper;
     @Autowired
     BoardRepository boardRepository;
+    @Autowired
+    CommentRepository commentRepository;
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -69,6 +76,58 @@ class BoardIntegrationTest {
                                 headerWithName("Location").description("redirect url")
                         )
                 ));
+    }
+
+    @Order(2)
+    @DisplayName("게시물에 댓글 남기기")
+    @Test
+    public void Board_Add_Comment() throws Exception {
+        User saveUser = userRepository.findById(1L).get();
+        mockMvc.perform(post("/board/{id}/comment",1L)
+                .session(setSession(saveUser))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(BoardUtils.getCommentPost())))
+                .andDo(print())
+                .andExpect(status().isFound())
+                .andExpect(header().exists("Location"))
+                .andDo(document("게시물에 댓글 남기기",
+                        pathParameters(
+                                parameterWithName("id").description("게시물 식별자")
+                        ),
+                        requestFields(
+                                fieldWithPath("content").description("댓글 내용")
+                        ),
+                        responseHeaders(
+                                headerWithName("Location").description("redirect url")
+                        )
+                ));
+    }
+
+    @Order(3)
+    @DisplayName("게시물에 대댓글 남기기")
+    @Test
+    public void Board_Add_SubComment() throws Exception {
+        User saveUser = userRepository.findById(1L).get();
+        mockMvc.perform(post("/board/{boardId}/comment/{commentId}/subcomment",1L,1L)
+                .session(setSession(saveUser))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(BoardUtils.getCommentPost())))
+                .andDo(print())
+                .andExpect(status().isFound())
+                .andExpect(header().exists("Location"))
+                .andDo(document("게시물에 댓글 남기기",
+                        pathParameters(
+                                parameterWithName("boardId").description("게시물 식별자"),
+                                parameterWithName("commentId").description("댓글 식별자")
+                        ),
+                        requestFields(
+                                fieldWithPath("content").description("댓글 내용")
+                        ),
+                        responseHeaders(
+                                headerWithName("Location").description("redirect url")
+                        )
+                ));
+
     }
 
     @DisplayName("로그인 하지 않은 사용자가 게시물 작성을 시도할 경우 401에러를 반환한다.")
@@ -126,8 +185,23 @@ class BoardIntegrationTest {
                             fieldWithPath("title").description("게시물 제목"),
                             fieldWithPath("content").description("게시물 내용"),
                             fieldWithPath("writeTime").description("게시물 작성 시간"),
-                            subsectionWithPath("user").description("게시물 작성 유저 정보"),
-                            subsectionWithPath("commentList.[]").description("게시물 댓글 리스트")
+                            fieldWithPath("commentList.[]").description("게시물 댓글 리스트"),
+                            fieldWithPath("commentList.[].id").description("댓글 식별자"),
+                            fieldWithPath("commentList.[].content").description("댓글 내용"),
+                            fieldWithPath("commentList.[].writeTime").description("댓글 작성 시간"),
+                            fieldWithPath("commentList.[].writerLoginId").description("댓글 작성 유저 로그인 아이디"),
+                            fieldWithPath("commentList.[].subCommentList.[]").description("대댓글 리스트"),
+                            fieldWithPath("commentList.[].subCommentList.[].id").description("대댓글 식별자"),
+                            fieldWithPath("commentList.[].subCommentList.[].content").description("대댓글 내용"),
+                            fieldWithPath("commentList.[].subCommentList.[].writerLoginId").description("대댓글 작성 유저 로그인 아이디"),
+                            fieldWithPath("commentList.[].subCommentList.[].writeTime").description("대댓글 작성 시간"),
+                            fieldWithPath("user.id").description("유저 식별자"),
+                            fieldWithPath("user.loginId").description("유저 로그인 아이디"),
+                            fieldWithPath("user.password").description("유저 패스워드"),
+                            fieldWithPath("user.name").description("유저 이름"),
+                            fieldWithPath("user.birthday").description("유저 생년월일"),
+                            fieldWithPath("user.email").description("유저 이메일"),
+                            fieldWithPath("user.phoneNumber").description("유저 전화번호")
                     )
                 ));
     }
@@ -176,28 +250,6 @@ class BoardIntegrationTest {
                                 fieldWithPath("[].title").description("게시물 제목"),
                                 fieldWithPath("[].writeTime").description("게시물 작성 시간"),
                                 fieldWithPath("[].loginId").description("게시물 작성자 로그인 아이디")
-                        )
-                ));
-    }
-
-    @DisplayName("게시물에 댓글 남기기")
-    @Test
-    public void Board_Add_Comment() throws Exception {
-        User saveUser = userRepository.findById(1L).get();
-        Board saveBoard = boardRepository.save(BoardUtils.getCompleteBoard());
-        mockMvc.perform(post("/board/{id}/comment",saveBoard.getId())
-                .session(setSession(saveUser))
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(BoardUtils.getCommentPost())))
-                .andDo(print())
-                .andExpect(status().isFound())
-                .andExpect(header().exists("Location"))
-                .andDo(document("게시물에 댓글 남기기",
-                        requestFields(
-                                fieldWithPath("content").description("댓글 내용")
-                        ),
-                        responseHeaders(
-                                headerWithName("Location").description("redirect url")
                         )
                 ));
     }
