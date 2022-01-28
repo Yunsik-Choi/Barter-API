@@ -1,7 +1,7 @@
 package com.project.barter.board;
 
 import com.project.barter.board.dto.BoardPost;
-import com.project.barter.comment.CommentPost;
+import com.project.barter.comment.dto.CommentPost;
 import com.project.barter.user.UserUtils;
 
 public class BoardUtils {

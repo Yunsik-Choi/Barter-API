@@ -1,9 +1,9 @@
 package com.project.barter.user;
 
 import com.project.barter.user.exception.CustomBindingException;
-import com.project.barter.user.exception.UserNotExistsException;
 import com.project.barter.user.exception.LoginIdAlreadyExistsException;
 import com.project.barter.user.exception.UserLoginUnavailableException;
+import com.project.barter.user.exception.UserNotExistsException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ControllerAdvice;

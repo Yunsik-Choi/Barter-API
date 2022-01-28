@@ -2,7 +2,6 @@ package com.project.barter.board;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.barter.board.dto.BoardPost;
-import com.project.barter.comment.Comment;
 import com.project.barter.comment.CommentRepository;
 import com.project.barter.global.GlobalConst;
 import com.project.barter.user.User;
@@ -20,15 +19,14 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import javax.servlet.ServletContext;
 
-import java.util.List;
-import java.util.Optional;
-
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
-import static org.springframework.restdocs.headers.HeaderDocumentation.*;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -108,6 +106,7 @@ class BoardIntegrationTest {
     @Test
     public void Board_Add_SubComment() throws Exception {
         User saveUser = userRepository.findById(1L).get();
+
         mockMvc.perform(post("/board/{boardId}/comment/{commentId}/subcomment",1L,1L)
                 .session(setSession(saveUser))
                 .contentType(MediaType.APPLICATION_JSON)

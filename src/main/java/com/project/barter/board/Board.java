@@ -1,13 +1,10 @@
 package com.project.barter.board;
 
-import com.project.barter.comment.Comment;
 import com.project.barter.global.BaseTimeEntity;
 import com.project.barter.user.User;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @AllArgsConstructor @NoArgsConstructor
 @Builder

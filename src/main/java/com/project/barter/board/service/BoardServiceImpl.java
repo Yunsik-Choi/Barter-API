@@ -1,12 +1,15 @@
-package com.project.barter.board;
+package com.project.barter.board.service;
 
+import com.project.barter.board.Board;
+import com.project.barter.board.exception.BoardNotExistsException;
+import com.project.barter.board.BoardRepository;
 import com.project.barter.board.dto.BoardPost;
 import com.project.barter.board.dto.BoardPreview;
 import com.project.barter.board.dto.BoardResponse;
 import com.project.barter.board.dto.BoardWithComment;
 import com.project.barter.comment.Comment;
-import com.project.barter.comment.CommentNotExistsException;
-import com.project.barter.comment.CommentPost;
+import com.project.barter.comment.exception.CommentNotExistsException;
+import com.project.barter.comment.dto.CommentPost;
 import com.project.barter.comment.CommentRepository;
 import com.project.barter.comment.SubComment.SubComment;
 import com.project.barter.user.service.UserService;

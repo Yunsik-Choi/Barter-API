@@ -13,4 +13,5 @@ public class WebConfigure implements WebMvcConfigurer {
         registry.addInterceptor(new BoardAuthenticationInterceptor())
                 .addPathPatterns("/board/**");
     }
+
 }

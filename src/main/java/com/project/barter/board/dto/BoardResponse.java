@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor @AllArgsConstructor
 @Getter @Setter
 public class BoardResponse {
+
     private Long id;
 
     private String title;
