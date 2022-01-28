@@ -18,7 +18,7 @@ public class BoardPost {
                 .title(title)
                 .content(content)
                 .build();
-        board.addUser(user);
+        board.addWriter(user);
         return board;
     }
 

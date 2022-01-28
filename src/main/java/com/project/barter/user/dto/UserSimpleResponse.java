@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class LoginResponse {
+public class UserSimpleResponse {
 
     private Long id;
 
@@ -13,14 +13,14 @@ public class LoginResponse {
 
     private String name;
 
-    public LoginResponse(Long id, String loginId, String name) {
+    public UserSimpleResponse(Long id, String loginId, String name) {
         this.id = id;
         this.loginId = loginId;
         this.name = name;
     }
 
-    public static LoginResponse byUser(User user){
-        return new LoginResponse(user.getId(), user.getLoginId(), user.getName());
+    public static UserSimpleResponse byUser(User user){
+        return new UserSimpleResponse(user.getId(), user.getLoginId(), user.getName());
     }
 
 }

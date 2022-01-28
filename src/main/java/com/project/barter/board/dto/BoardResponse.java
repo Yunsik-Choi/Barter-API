@@ -3,6 +3,8 @@ package com.project.barter.board.dto;
 import com.project.barter.board.Board;
 import com.project.barter.user.User;
 import com.project.barter.user.dto.UserInfo;
+import com.project.barter.user.dto.UserInfoBoard;
+import com.project.barter.user.dto.UserSimpleResponse;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -20,7 +22,7 @@ public class BoardResponse {
 
     private LocalDateTime writeTime;
 
-    private UserInfo user;
+    private UserInfoBoard writer;
 
     public static BoardResponse byBoard(Board board){
         return BoardResponse.builder()
@@ -28,7 +30,7 @@ public class BoardResponse {
                 .title(board.getTitle())
                 .content(board.getContent())
                 .writeTime(board.getCreateDate())
-                .user(UserInfo.byUser(board.getUser()))
+                .writer(UserInfoBoard.byUser(board.getUser()))
                 .build();
     }
 

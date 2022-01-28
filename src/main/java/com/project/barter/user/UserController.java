@@ -2,7 +2,7 @@ package com.project.barter.user;
 
 import com.project.barter.global.GlobalConst;
 import com.project.barter.global.dto.EntityBody;
-import com.project.barter.user.dto.LoginResponse;
+import com.project.barter.user.dto.UserSimpleResponse;
 import com.project.barter.user.dto.UserInfo;
 import com.project.barter.user.dto.UserLogin;
 import com.project.barter.user.dto.UserPost;
@@ -34,11 +34,11 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<EntityBody<LoginResponse>> login(@RequestBody UserLogin userLogin, BindingResult bindingResult, HttpServletRequest request){
+    public ResponseEntity<EntityBody<UserSimpleResponse>> login(@RequestBody UserLogin userLogin, BindingResult bindingResult, HttpServletRequest request){
         BindingErrorCheck(bindingResult);
         User user = userService.login(userLogin);
         setLoginSession(request, user.getLoginId());
-        return ResponseEntity.ok().body(new EntityBody<>(LoginResponse.byUser(user)));
+        return ResponseEntity.ok().body(new EntityBody<>(UserSimpleResponse.byUser(user)));
     }
 
     @GetMapping("/user/{id}")

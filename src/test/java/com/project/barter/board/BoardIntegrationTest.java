@@ -164,7 +164,7 @@ class BoardIntegrationTest {
                                 fieldWithPath("data.title").description("게시물 제목"),
                                 fieldWithPath("data.content").description("게시물 내용"),
                                 fieldWithPath("data.writeTime").description("게시물 작성 시간"),
-                                subsectionWithPath("data.user").description("게시물 작성 유저 정보"),
+                                subsectionWithPath("data.writer").description("게시물 작성 유저 정보"),
                                 subsectionWithPath("data.commentList.[]").description("게시물 댓글 리스트")
 
                         )
@@ -198,13 +198,9 @@ class BoardIntegrationTest {
                             fieldWithPath("data.commentList.[].subCommentList.[].content").description("대댓글 내용"),
                             fieldWithPath("data.commentList.[].subCommentList.[].writerLoginId").description("대댓글 작성 유저 로그인 아이디"),
                             fieldWithPath("data.commentList.[].subCommentList.[].writeTime").description("대댓글 작성 시간"),
-                            fieldWithPath("data.user.id").description("유저 식별자"),
-                            fieldWithPath("data.user.loginId").description("유저 로그인 아이디"),
-                            fieldWithPath("data.user.password").description("유저 패스워드"),
-                            fieldWithPath("data.user.name").description("유저 이름"),
-                            fieldWithPath("data.user.birthday").description("유저 생년월일"),
-                            fieldWithPath("data.user.email").description("유저 이메일"),
-                            fieldWithPath("data.user.phoneNumber").description("유저 전화번호")
+                            fieldWithPath("data.writer.id").description("유저 식별자"),
+                            fieldWithPath("data.writer.writerLoginId").description("유저 로그인 아이디"),
+                            fieldWithPath("data.writer.name").description("유저 이름")
                     )
                 ));
     }
@@ -237,7 +233,7 @@ class BoardIntegrationTest {
                                 fieldWithPath("data.[].title").description("게시물 제목"),
                                 fieldWithPath("data.[].content").description("게시물 내용"),
                                 fieldWithPath("data.[].writeTime").description("게시물 작성 시간"),
-                                subsectionWithPath("data.[].user").description("게시물 작성 유저 정보")
+                                subsectionWithPath("data.[].writer").description("게시물 작성 유저 정보")
                         )
                 ));
     }
@@ -256,7 +252,7 @@ class BoardIntegrationTest {
                                 fieldWithPath("data.[].id").description("게시물 식별자"),
                                 fieldWithPath("data.[].title").description("게시물 제목"),
                                 fieldWithPath("data.[].writeTime").description("게시물 작성 시간"),
-                                fieldWithPath("data.[].loginId").description("게시물 작성자 로그인 아이디")
+                                fieldWithPath("data.[].writerLoginId").description("게시물 작성자 로그인 아이디")
                         )
                 ));
     }

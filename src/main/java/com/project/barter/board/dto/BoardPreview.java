@@ -16,14 +16,14 @@ public class BoardPreview {
 
     private LocalDateTime writeTime;
 
-    private String loginId;
+    private String writerLoginId;
 
     public static BoardPreview byBoard(Board board) {
         return BoardPreview.builder()
                 .id(board.getId())
                 .title(board.getTitle())
                 .writeTime(board.getCreateDate())
-                .loginId(board.getUser().getLoginId())
+                .writerLoginId(board.getUser().getLoginId())
                 .build();
     }
 }

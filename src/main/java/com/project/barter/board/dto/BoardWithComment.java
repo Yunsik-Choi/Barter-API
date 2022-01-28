@@ -5,6 +5,8 @@ import com.project.barter.comment.Comment;
 import com.project.barter.comment.dto.CommentResponse;
 import com.project.barter.user.User;
 import com.project.barter.user.dto.UserInfo;
+import com.project.barter.user.dto.UserInfoBoard;
+import com.project.barter.user.dto.UserSimpleResponse;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -25,7 +27,7 @@ public class BoardWithComment {
 
     private List<CommentResponse> commentList;
 
-    private UserInfo user;
+    private UserInfoBoard writer;
 
     public static BoardWithComment byBoard(Board board, List<Comment> commentList){
         User user = board.getUser();
@@ -35,7 +37,7 @@ public class BoardWithComment {
                 .content(board.getContent())
                 .writeTime(board.getCreateDate())
                 .commentList(CommentResponse.byCommentList(commentList))
-                .user(UserInfo.byUser(user))
+                .writer(UserInfoBoard.byUser(user))
                 .build();
     }
 

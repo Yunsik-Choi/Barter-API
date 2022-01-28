@@ -25,7 +25,7 @@ public class Board extends BaseTimeEntity {
     @JoinColumn(name = "BOARD_WRITER_USER_ID")
     private User user;
 
-    public void addUser(User user){
+    public void addWriter(User user){
         this.user = user;
         user.getBoardList().add(this);
     }
