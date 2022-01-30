@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureRestDocs
 @AutoConfigureMockMvc
 @SpringBootTest
-class BoardIntegrationTest {
+class BoardIntegrationTest extends BoardField{
 
     @Autowired
     MockMvc mockMvc;
@@ -157,16 +157,9 @@ class BoardIntegrationTest {
                         pathParameters(
                                 parameterWithName("id").description("게시물 식별자")
                         ),
-                        responseFields(
-                                fieldWithPath("status").description("Http 상태코드"),
-                                fieldWithPath("message").description("응답 메세지"),
-                                fieldWithPath("data.id").description("게시물 식별자"),
-                                fieldWithPath("data.title").description("게시물 제목"),
-                                fieldWithPath("data.content").description("게시물 내용"),
-                                fieldWithPath("data.writeTime").description("게시물 작성 시간"),
-                                subsectionWithPath("data.writer").description("게시물 작성 유저 정보"),
-                                subsectionWithPath("data.commentList.[]").description("게시물 댓글 리스트")
-
+                        responseFieldData(
+                                boardResponseField(),
+                                commentListResponseField()
                         )
                 ));
     }
@@ -225,15 +218,8 @@ class BoardIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("Board 전체 조회",
-                        responseFields(
-                                fieldWithPath("status").description("Http 상태코드"),
-                                fieldWithPath("message").description("응답 메세지"),
-                                fieldWithPath("data.[]").description("게시물 리스트"),
-                                fieldWithPath("data.[].id").description("게시물 식별자"),
-                                fieldWithPath("data.[].title").description("게시물 제목"),
-                                fieldWithPath("data.[].content").description("게시물 내용"),
-                                fieldWithPath("data.[].writeTime").description("게시물 작성 시간"),
-                                subsectionWithPath("data.[].writer").description("게시물 작성 유저 정보")
+                        responseDataListField(
+                                boardResponseField()
                         )
                 ));
     }
@@ -245,14 +231,8 @@ class BoardIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("Board 미리보기 전체 조회",
-                        responseFields(
-                                fieldWithPath("status").description("Http 상태코드"),
-                                fieldWithPath("message").description("응답 메세지"),
-                                fieldWithPath("data.[]").description("게시물 리스트"),
-                                fieldWithPath("data.[].id").description("게시물 식별자"),
-                                fieldWithPath("data.[].title").description("게시물 제목"),
-                                fieldWithPath("data.[].writeTime").description("게시물 작성 시간"),
-                                fieldWithPath("data.[].writerLoginId").description("게시물 작성자 로그인 아이디")
+                        responseDataListField(
+                            boardPreviewResponseField()
                         )
                 ));
     }
