@@ -35,9 +35,3 @@ out/
 
 ### VS Code ###
 .vscode/
-src/main/generated/
-src/main/java/com/project/barter/board/BoardNotExistsException.java
-src/main/java/com/project/barter/board/BoardService.java
-src/main/java/com/project/barter/comment/
-src/main/resources/templates/
-src/test/java/com/project/barter/comment/
