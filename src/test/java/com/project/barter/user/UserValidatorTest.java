@@ -1,6 +1,5 @@
 package com.project.barter.user;
 
-import com.project.barter.user.domain.Birthday;
 import com.project.barter.user.validator.BirthdayValidator;
 import com.project.barter.user.validator.PhoneNumberValidator;
 import org.assertj.core.api.Assertions;
@@ -17,17 +16,16 @@ public class UserValidatorTest {
     @DisplayName("생년월일 검증기 테스트")
     @ParameterizedTest
     @MethodSource("birthdayList")
-    public void Birthday_Test(Boolean bool, Birthday birthday){
+    public void Birthday_Test(Boolean bool, LocalDate birthday){
         BirthdayValidator birthdayValidator = new BirthdayValidator();
         Assertions.assertThat(bool).isEqualTo(birthdayValidator.isValid(birthday,null));
     }
 
     public static Stream<Arguments> birthdayList(){
-        LocalDate now = LocalDate.now();
         return Stream.of(
-                Arguments.of(true,new Birthday(1998,01,01)),
-                Arguments.of(true,new Birthday(now.getYear(),now.getMonthValue(),now.getDayOfMonth())),
-                Arguments.of(false,new Birthday(2200,12,12))
+                Arguments.of(true,LocalDate.of(1998,01,01)),
+                Arguments.of(true,LocalDate.now()),
+                Arguments.of(false,LocalDate.of(3000,01,01))
         );
     }
 

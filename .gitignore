@@ -1,9 +1,9 @@
 HELP.md
 .gradle
-build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+build/
 
 ### STS ###
 .apt_generated
@@ -35,3 +35,9 @@ out/
 
 ### VS Code ###
 .vscode/
+src/main/generated/
+src/main/java/com/project/barter/board/BoardNotExistsException.java
+src/main/java/com/project/barter/board/BoardService.java
+src/main/java/com/project/barter/comment/
+src/main/resources/templates/
+src/test/java/com/project/barter/comment/

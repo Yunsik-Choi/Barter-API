@@ -1,0 +1,311 @@
+openapi: 3.0.1
+info:
+  title: barter-swagger-api
+  description: barter application swagger api by spring rest docs
+  version: 1.0.0
+servers:
+- url: ""
+tags: []
+paths:
+  /board:
+    get:
+      tags:
+      - board
+      operationId: 'Board '
+      parameters:
+      - name: preview
+        in: query
+        description: 게시물 preview조회
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/board112020673'
+              examples:
+                Board 미리보기 전체 조회:
+                  value: "[{\"id\":1,\"title\":\"제목\",\"createDate\":\"2022-01-25T17:21:58.105395\"\
+                    ,\"loginId\":\"loginId\"}]"
+                Board 전체 조회:
+                  value: "[{\"id\":1,\"title\":\"제목\",\"content\":\"내용\",\"createDate\"\
+                    :\"2022-01-25T17:21:58.105395\",\"modifiedDate\":\"2022-01-25T17:21:58.105395\"\
+                    ,\"user\":{\"id\":1,\"loginId\":\"loginId\",\"password\":\"password\"\
+                    ,\"name\":\"이름\",\"birthday\":\"2020-12-12\",\"email\":\"google@gmail.com\"\
+                    ,\"phoneNumber\":\"01012345678\"}}]"
+    post:
+      tags:
+      - board
+      operationId: Board Write
+      requestBody:
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/board1066087566'
+            examples:
+              Board Write:
+                value: "{\"title\":\"제목\",\"content\":\"내용\"}"
+              Board Write UnAuthorized:
+                value: "{\"title\":\"제목\",\"content\":\"내용\"}"
+      responses:
+        "302":
+          description: "302"
+          headers:
+            Location:
+              description: redirect url
+              schema:
+                type: string
+        "401":
+          description: "401"
+  /board/{id}:
+    get:
+      tags:
+      - board
+      operationId: 'Board '
+      parameters:
+      - name: id
+        in: path
+        description: 게시물 식별자
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/board-id-1109362905'
+              examples:
+                Board 식별자로 조회:
+                  value: "{\"id\":1,\"title\":\"제목\",\"content\":\"내용\",\"createDate\"\
+                    :\"2022-01-25T17:21:58.105395\",\"modifiedDate\":\"2022-01-25T17:21:58.105395\"\
+                    ,\"user\":{\"id\":1,\"loginId\":\"loginId\",\"password\":\"password\"\
+                    ,\"name\":\"이름\",\"birthday\":\"2020-12-12\",\"email\":\"google@gmail.com\"\
+                    ,\"phoneNumber\":\"01012345678\"}}"
+        "404":
+          description: "404"
+  /join:
+    post:
+      tags:
+      - join
+      operationId: 'User '
+      requestBody:
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/join1581844592'
+            examples:
+              User Post Binding 실패:
+                value: "{\"loginId\":\" \",\"password\":\" \",\"name\":\" \",\"birthday\"\
+                  :\"3000-12-12\",\"email\":\"googl!gmail.com\",\"phoneNumber\":\"\
+                  0112345678\"}"
+              User 회원가입:
+                value: "{\"loginId\":\"loginId\",\"password\":\"password\",\"name\"\
+                  :\"이름\",\"birthday\":\"2020-12-12\",\"email\":\"google@gmail.com\"\
+                  ,\"phoneNumber\":\"01012345678\"}"
+              User 회원가입 실패 Exists LoginId:
+                value: "{\"loginId\":\"loginId\",\"password\":\"password\",\"name\"\
+                  :\"이름\",\"birthday\":\"2020-12-12\",\"email\":\"google@gmail.com\"\
+                  ,\"phoneNumber\":\"01012345678\"}"
+      responses:
+        "400":
+          description: "400"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/join486549215'
+              examples:
+                User Post Binding 실패:
+                  value: "[\"must not be blank\",\"must not be blank\",\"must be a\
+                    \ well-formed email address\",\"must not be blank\",\"Birthday\
+                    \ fail Validation\",\"PhoneNumber fail Validation\"]"
+        "302":
+          description: "302"
+          headers:
+            Location:
+              description: redirect url
+              schema:
+                type: string
+  /login:
+    post:
+      tags:
+      - login
+      operationId: 'User '
+      requestBody:
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/login-730751912'
+            examples:
+              User Login:
+                value: "{\"loginId\":\"loginId\",\"password\":\"password\"}"
+              User Unavailable UserLogin:
+                value: "{\"loginId\":\"id\",\"password\":\"pw\"}"
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user-id855921146'
+              examples:
+                User Login:
+                  value: "{\"id\":1,\"loginId\":\"loginId\",\"password\":\"password\"\
+                    ,\"name\":\"이름\",\"birthday\":\"2020-12-12\",\"email\":\"google@gmail.com\"\
+                    ,\"phoneNumber\":\"01012345678\",\"boardList\":[]}"
+        "400":
+          description: "400"
+  /user/{id}:
+    get:
+      tags:
+      - user
+      operationId: 'User '
+      parameters:
+      - name: id
+        in: path
+        description: 유저 식별자
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user-id855921146'
+              examples:
+                User Find By Id:
+                  value: "{\"id\":1,\"loginId\":\"loginId\",\"password\":\"password\"\
+                    ,\"name\":\"이름\",\"birthday\":\"2020-12-12\",\"email\":\"google@gmail.com\"\
+                    ,\"phoneNumber\":\"01012345678\",\"boardList\":[]}"
+        "404":
+          description: "404"
+components:
+  schemas:
+    board1066087566:
+      type: object
+      properties:
+        title:
+          type: string
+          description: 게시물 제목
+        content:
+          type: string
+          description: 게시물 내용
+    board-id-1109362905:
+      type: object
+      properties:
+        modifiedDate:
+          type: string
+          description: 게시물 수정 시간
+        id:
+          type: number
+          description: 게시물 식별자
+        title:
+          type: string
+          description: 게시물 제목
+        user:
+          type: object
+          description: 게시물 작성 유저
+        content:
+          type: string
+          description: 게시물 내용
+        createDate:
+          type: string
+          description: 게시물 작성 시간
+    join1581844592:
+      type: object
+      properties:
+        birthday:
+          type: string
+          description: 유저 생년월일
+        password:
+          type: string
+          description: 유저 로그인 비밀번호
+        phoneNumber:
+          type: string
+          description: 유저 전화번호
+        loginId:
+          type: string
+          description: 유저 로그인 아이디
+        name:
+          type: string
+          description: 유저 이름
+        email:
+          type: string
+          description: 유저 이메일
+    login-730751912:
+      type: object
+      properties:
+        password:
+          type: string
+          description: 로그인시 사용하는 유저 비밀번호
+        loginId:
+          type: string
+          description: 로그인시 사용하는 유저아이디
+    board112020673:
+      type: array
+      items:
+        type: object
+        properties:
+          loginId:
+            type: string
+            description: 게시물 작성자 로그인 아이디
+          modifiedDate:
+            type: string
+            description: 게시물 수정 시간
+          id:
+            type: number
+            description: 게시물 식별자
+          title:
+            type: string
+            description: 게시물 제목
+          user:
+            type: object
+            description: 게시물 작성 유저
+          content:
+            type: string
+            description: 게시물 내용
+          createDate:
+            type: string
+            description: 게시물 작성 시간
+        description: 게시물 리스트
+    user-id855921146:
+      type: object
+      properties:
+        birthday:
+          type: string
+          description: 유저 생년월일
+        password:
+          type: string
+          description: 유저 로그인 비밀번호
+        phoneNumber:
+          type: string
+          description: 유저 전화번호
+        loginId:
+          type: string
+          description: 유저 로그인 아이디
+        name:
+          type: string
+          description: 유저 이름
+        boardList:
+          type: array
+          description: 게시물 리스트
+          items:
+            oneOf:
+            - type: object
+            - type: boolean
+            - type: string
+            - type: number
+        id:
+          type: number
+          description: 유저 식별자
+        email:
+          type: string
+          description: 유저 이메일
+    join486549215:
+      type: object

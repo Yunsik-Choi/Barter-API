@@ -4,15 +4,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotEmpty;
+
 @NoArgsConstructor
 @Getter @Setter
 public class UserLogin {
 
-    private String userId;
+    @NotEmpty
+    private String loginId;
+    @NotEmpty
     private String password;
 
-    public UserLogin(String userId, String password) {
-        this.userId = userId;
+    public UserLogin(String loginId, String password) {
+        this.loginId = loginId;
         this.password = password;
     }
 }

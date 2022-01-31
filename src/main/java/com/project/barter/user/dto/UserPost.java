@@ -1,12 +1,12 @@
 package com.project.barter.user.dto;
 
-import com.project.barter.user.domain.Birthday;
 import com.project.barter.user.validator.Birth;
 import com.project.barter.user.validator.PhoneNumber;
 import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
 
 @NoArgsConstructor @AllArgsConstructor
 @Builder
@@ -14,13 +14,13 @@ import javax.validation.constraints.NotBlank;
 public class UserPost {
 
     @NotBlank
-    private String userId;
+    private String loginId;
     @NotBlank
     private String password;
     @NotBlank
     private String name;
     @Birth
-    private Birthday birthday;
+    private LocalDate birthday;
     @Email
     private String email;
     @PhoneNumber
