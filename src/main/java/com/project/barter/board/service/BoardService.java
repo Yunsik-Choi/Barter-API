@@ -11,15 +11,15 @@ import java.util.List;
 
 public interface BoardService {
 
-    Board findById(Long id);
+    Board findBoardById(Long id);
 
-    Board save(BoardPost boardRequest, String sessionLoginIdAttribute);
+    Board saveBoard(BoardPost boardRequest, String sessionLoginIdAttribute);
 
     List<BoardPreview> findBoardPreviewAll();
 
-    List<BoardResponse> findAll();
+    List<BoardResponse> findAllBoards();
 
-    Board addComment(Long id, CommentPost commentPost, String sessionLoginIdAttribute);
+    Board addComment(Long boardId, CommentPost commentPost, String sessionLoginIdAttribute);
 
     BoardWithComment findBoardWithCommentById(Long id);
 

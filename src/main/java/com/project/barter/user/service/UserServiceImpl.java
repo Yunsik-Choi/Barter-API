@@ -9,11 +9,13 @@ import com.project.barter.user.exception.UserNotExistsException;
 import com.project.barter.user.exception.LoginIdAlreadyExistsException;
 import com.project.barter.user.exception.UserLoginUnavailableException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Transactional
 @Service
@@ -28,6 +30,7 @@ public class UserServiceImpl implements UserService{
         if(userByLoginId.isPresent())
             throw new LoginIdAlreadyExistsException();
         User joinUser = userRepository.save(objectMapper.convertValue(userPost, User.class));
+        log.info("Join User ID : {} Login ID : {}",joinUser.getId(), joinUser.getLoginId());
         return joinUser.getId();
     }
 
@@ -37,6 +40,7 @@ public class UserServiceImpl implements UserService{
                 userRepository.findUserByLoginIdAndPassword(userLogin.getLoginId(), userLogin.getPassword());
         if(userByLoginIdAndPassword.isEmpty())
             throw new UserLoginUnavailableException();
+        log.info("Login User Login ID : {}",userLogin.getLoginId());
         return userByLoginIdAndPassword.get();
     }
 
@@ -45,6 +49,7 @@ public class UserServiceImpl implements UserService{
         Optional<User> userById = userRepository.findById(id);
         if(userById.isEmpty())
             throw new UserNotExistsException();
+        log.info("Find User {}",id);
         return userById.get();
     }
 
@@ -53,6 +58,7 @@ public class UserServiceImpl implements UserService{
         Optional<User> userByLoginId = userRepository.findUserByLoginId(loginId);
         if(userByLoginId.isEmpty())
             throw new UserNotExistsException();
+        log.info("Find By Login ID : {}",loginId);
         return userByLoginId.get();
     }
 }

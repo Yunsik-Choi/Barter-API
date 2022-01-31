@@ -9,6 +9,7 @@ import com.project.barter.user.dto.UserPost;
 import com.project.barter.user.exception.CustomBindingException;
 import com.project.barter.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 public class UserController {
@@ -28,6 +30,7 @@ public class UserController {
     @PostMapping("/join")
     public void join(@Validated @RequestBody UserPost userPost, BindingResult bindingResult,
                                                              HttpServletResponse response) throws IOException {
+        log.info("Start Join Login ID : ",userPost.getLoginId());
         BindingErrorCheck(bindingResult);
         Long userId = userService.join(userPost);
         response.sendRedirect("/user/"+userId);
@@ -35,6 +38,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<EntityBody<UserSimpleResponse>> login(@RequestBody UserLogin userLogin, BindingResult bindingResult, HttpServletRequest request){
+        log.info("Start Login ID : {}",userLogin.getLoginId());
         BindingErrorCheck(bindingResult);
         User user = userService.login(userLogin);
         setLoginSession(request, user.getLoginId());
@@ -43,6 +47,7 @@ public class UserController {
 
     @GetMapping("/user/{id}")
     public ResponseEntity<EntityBody<UserInfo>> findById(@PathVariable Long id){
+        log.info("Start Find User {}",id);
         User user = userService.findById(id);
         return ResponseEntity.ok().body(new EntityBody<>(UserInfo.byUser(user)));
     }
@@ -51,6 +56,8 @@ public class UserController {
         HttpSession session = request.getSession(true);
         session.setAttribute(GlobalConst.loginSessionAttributeName,loginId);
         session.setMaxInactiveInterval(GlobalConst.loginSessionInActiveTime);
+        log.info("SESSION Login ID : {}");
+        log.debug("SESSION Active Time : {}");
     }
 
     private void BindingErrorCheck(BindingResult bindingResult) {
